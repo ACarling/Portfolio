@@ -1,0 +1,292 @@
+/* todo: if mobile screen get ride of sidebar */
+
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #2e2c36;
+}
+
+* {
+    box-sizing: border-box;
+
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+#BorderOutline {
+    position: absolute;
+    border-top: 1px solid white;
+    box-sizing: border-box;
+    width: calc(100% - 50px);
+    height: calc(100% - 90px);
+    left: 25px;
+    bottom: 25px;
+}
+
+/* ========== Title container ========== */
+
+#topBar {
+    position: absolute;
+	top: 10px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display: block;
+}
+
+#titleContainer {
+    background-color: #2e2c36;
+	width: fit-content;
+	text-align: center;
+	z-index: 100;
+	display: block;
+    margin: auto;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    right: 5px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: rgb(80, 80, 80);
+    border-radius: 10px;
+}
+
+h1 {
+    color: white;
+    font-weight: 400;
+    font-size: calc(30pt + 1vw);
+    margin: 0px;
+}
+
+h2 {
+    color: white;
+    font-weight: 100;
+    font-size: calc(15pt + .5vw);
+    margin-top: 0px;
+}
+
+h3 {
+    color: white;
+    font-weight: 100;
+    font-size: 15pt;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+
+#contentContainer {
+    width: 100vw;
+    height: calc(100vh - 125px);
+    bottom: 0;
+    position: fixed;
+}
+
+
+/* ========== sideBar ========== */
+#sideBar {
+    width: 0px;
+    overflow: hidden;
+    height: 0px;
+    position: absolute; 
+    top: -100px;
+}
+
+#contentBox {
+    right: 0;
+    position: fixed;
+    height: calc(100vh - 125px);
+    width: 100vw;
+    overflow-y: scroll;
+    color: white;
+    bottom: 0;
+    overflow-x: hidden;
+}
+
+#contentBox .textSegment {
+    margin: 0px 5%;
+    margin-bottom: 100px;
+}
+.frameContainer video {
+    width: 100%;
+    height: auto;
+    grid-area: 1;
+}
+.frameContainer .frame {
+    width: 100%;
+    height: auto;
+    grid-area: 1;
+}
+.frameContainer .description {
+    width: 100%;
+    grid-area: 2;
+    margin-bottom: 50px;
+}
+.frameContainer .description h3 {
+    margin-top: 20px;
+    text-align: center;
+}
+.frameContainer {
+    display: grid;
+}
+
+
+/* FOR GALLERY */
+
+.gallery {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-column-gap: 5px;
+}
+.imageContainer {
+    margin-bottom: 20px;
+}
+.imageContainer img {
+    width: 100%;
+    height: auto;
+}
+.imageContainer video {
+    width: 100%;
+    height: auto;
+}
+.imageContainer .description {
+    width: 100%;
+}
+.imageContainer .description h3 {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+@media only screen and (min-width: 1350px) {
+
+    
+    
+    /* FOR MAJOR PROJECTS */
+    .frameContainer {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    .frameContainer video {
+        width: 70%;
+        height: auto;
+    }
+    .frameContainer .frame {
+        width: 70%;
+        height: auto;
+    }
+    .frameContainer .description p,ul {
+        padding: 0px 20px;
+    }
+    .frameContainer .description h3 {
+        text-align: center;
+    }
+    .frameContainer .description {
+        width: 30%;
+    }
+
+    .imageContainer {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    .imageContainer .description {
+        position: absolute;
+        width: 100%;
+    }
+    
+    #contentBox .textSegment {
+        margin: 0px 10%;
+        margin-bottom: 100px;
+    }
+}
+
+
+
+@media only screen and (min-width: 1650px) {
+    /* FOR MAJOR PROJECTS */
+    .frameContainer {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    .frameContainer video {
+        width: 70%;
+        height: auto;
+    }
+    .frameContainer .frame {
+        width: 70%;
+        height: auto;
+    }
+    .frameContainer .description p,ul {
+        padding: 0px 20px;
+    }
+    .frameContainer .description h3 {
+        text-align: center;
+    }
+    .frameContainer .description {
+        width: 30%;
+    }
+
+    .imageContainer {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    .imageContainer .description {
+        position: absolute;
+        width: 100%;
+    }
+
+    #sideBar {
+        position: absolute;
+        top: 0;
+        width: 20vw;
+        height: 100%;
+        text-align: center;
+        z-index: 100;
+        padding: 70px 25px;
+        display: grid;
+        grid-template-rows: repeat(4, 70px);
+        align-items: start;
+    }
+
+    #sideBar div {
+        cursor: pointer;
+        border: 1px solid rgba(1,1,1,0);
+        align-content: center;
+        display: flex;
+        backdrop-filter: blur(5px);
+        transition: all ease 500ms;
+        padding: 10px 0px;
+    }
+
+
+    #sideBar div:hover {
+        border: 1px solid white;
+        border-radius: 50px;
+    }
+
+    #sideBar div p {
+        cursor: pointer;
+
+        color: white;
+        font-weight: 100;
+        font-size: calc(12px + .5vw);
+        text-align: center;
+        margin: auto;
+    }
+
+
+    #contentBox {
+        right: 0;
+        position: fixed;
+        height: calc(100vh - 125px);
+        width: 80vw;
+        overflow-y: scroll;
+        color: white;
+        bottom: 0;
+    }
+    
+    #contentBox .textSegment {
+        margin: 0px 10%;
+        margin-bottom: 100px;
+    }
+}
