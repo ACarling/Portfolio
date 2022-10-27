@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ringed Planet</title>
+
+    <style>
+        body {
+            margin: 0;
+        }
+        .inputContainer {
+            position: absolute;
+            display: grid;
+            z-index: 50000;
+            top: 0;
+            right: 0;
+            justify-items: right;
+        }
+        .inputContainer label {
+            display: block;
+            color: #bdbdbd;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <script> // globals
+        let asteroidField = [];
+        
+        let valueChange = true;
+
+
+        let palletBackground = 0x2e2c36
+        let palletLight = 0xfff3db
+
+        let palletFieldColour = 0x5f6566
+
+        let palletPlanetColoura = 0xFFFFFF
+        let palletPlanetColourb = 0xFF0000
+
+        let fieldRadius = 7;
+        let planetSize = 5;
+
+        let sunRotation = 45;
+
+
+        let reloadAsteroids = false;
+        let numberOfAsteroids = 2150
+    </script>
+    
+    <script src="./Lib.js"></script>
+    <script src="./OrbitalObject.js"></script>
+    <script src="../THREE.js"></script>
+    <script src="./Shaders/AsteroidShader.js"></script>
+    <script src="./Shaders/PlanetShader.js"></script>
+    <script src="./SunShader.js"></script>
+    <script>const TMath = THREE.MathUtils;</script>
+    <script src="./GenerateAsteroids.js"></script>
+    <script src="./index.js"></script>
+
+    <div class="inputContainer">
+        <label for="sunRot">Light Direction</label>
+        <input type="range" name="sunRot" id="sunRot">
+
+        <label for="sunRot">Number of Asteroids</label>
+        <input type="number" min="0" max="20000" name="numAsteroids" id="numAsteroids-input">
+        
+        <label for="sunRot">Asteroid Colour</label>
+        <input type="color" name="inputCol" id="inputCol">
+        
+        <label for="sunRot">Planet 1</label>
+        <input type="color" name="inputCol1" id="inputCol1">
+        
+        <label for="sunRot">Planet 2</label>
+        <input type="color" name="inputCol2" id="inputCol2">
+
+    </div>
+    <script>
+        var sunRotSlider = document.getElementById('sunRot');
+        var inputCol = document.getElementById('inputCol');
+        var inputCol1 = document.getElementById('inputCol1');
+        var inputCol2 = document.getElementById('inputCol2');
+        var numAsteroidsinput = document.getElementById('numAsteroids-input');
+
+
+        inputCol.value = ("#" + palletFieldColour.toString(16))
+        inputCol1.value = ("#" + palletPlanetColoura.toString(16))
+        inputCol2.value = ("#" + palletPlanetColourb.toString(16))
+
+        sunRotSlider.value = (sunRotation/360) * 100
+
+
+        sunRotSlider.oninput = function() {
+            sunRotation = (this.value/100) * 360;
+        }
+        inputCol.oninput = function() {
+            palletFieldColour = parseInt(this.value.replace("#", "0x"), 16);
+            valueChange = true;
+        }
+        inputCol1.oninput = function() {
+            palletPlanetColoura = parseInt(this.value.replace("#", "0x"), 16);
+            valueChange = true;
+        }
+        inputCol2.oninput = function() {
+            palletPlanetColourb = parseInt(this.value.replace("#", "0x"), 16);
+            valueChange = true;
+        }
+
+
+
+        numAsteroidsinput.value = numberOfAsteroids;
+        numAsteroidsinput.oninput = function () {
+            if(this.value > 20000) { this.value = 20000 } else if (this.value < 0) { this.value = 0}
+            numberOfAsteroids = this.value;
+            reloadAsteroids = true;
+        }
+
+    </script>
+
+</body>
+</html>
