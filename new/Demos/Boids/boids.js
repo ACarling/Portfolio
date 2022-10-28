@@ -1,3 +1,28 @@
+const noise = new perlinNoise3d();
+const palletBackground = 0x2e2c36
+
+let valueChanged = false;
+
+let palletLight = 0x5e84ab
+let palletGround = 0xa1a1a1
+let palletFish = 0xE59500
+let avoidFactor = 0.1; 
+let turnFactor = .1; 
+let centeringFactor = 0.002;
+let matchingFactor = 0.01;
+let homingFactor = 0.0005;
+
+let initial_palletLight = 0x5e84ab
+let initial_palletGround = 0xa1a1a1
+let initial_palletFish = 0x91D3D1
+let initial_avoidFactor = 0.1; 
+let initial_turnFactor = .1; 
+let initial_centeringFactor = 0.002;
+let initial_matchingFactor = 0.01;
+let initial_homingFactor = 0.0005;
+
+
+
 var b = [];
 var tankMaterial;
 let boidMaterial;

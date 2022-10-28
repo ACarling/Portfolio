@@ -1,7 +1,8 @@
 :root {
-    --background: #141414;
+    --dark: #141414;
     --hero: #E59500;
-    --text: #E5DADA;
+    --light: #E5DADA;
+    --font: 'Teko';
 }
 
 * {
@@ -9,40 +10,102 @@
 }
 
 body {
-    background-color: var(--background);
-    color: var(--text);
+    background-color: red;
+    color: green;
     margin: 0px;
     padding: 0px;
+    overflow: hidden;
 }
 
 h1 {
-    font-family: 'Teko', sans-serif;
+    font-family: var(--font), sans-serif;
     font-weight: 800;
 }
 
-#heroiframe {
+
+.section {
     position: absolute;
     width: 100vw;
     height: 100vh;
-    top: 0;
+    margin: 0px;
+    padding: 0px;
     overflow: hidden;
-    z-index: -1;
+}
+.section.dark {
+    background-color: var(--dark);
+    color: var(--light);
+}
+.section.light {
+    background-color: var(--light);
+    color: var(--dark);
+}
+.section.inactive-section {
+    visibility: hidden;
+}
+.section.staged-section {
+    top: 100vh;
+    z-index: 5;
+}
+
+
+
+.section .info-pane-container {
+    position: fixed;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+}
+.section .info-pane {
+    position: fixed;
+    font-family: var(--font);
+    font-size: 16pt;
+    line-height: 1em;
+    width: 100vw;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 50px 50px;
+    text-transform: uppercase;
+}
+.section .info-pane p {
+    margin: 0px;
+    padding: 0px;
+}
+.section .info-pane .info-grid {
+    display: grid;
+    grid-template-columns: 20px auto auto;
+    grid-column-gap: 50px;
+}
+.section .info-pane .contact {
+    text-align: right;
+}
+.section .info-pane .write-up {
+    text-align: right;
+}
+
+
+
+
+#heroiframe {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    position: relative;
 }
 
 .heroTitle {
     font-size: 100pt;
-    z-index: -2;
     width: 100vw;
-    position: relative;
+    position: fixed;
     text-align: center;
     margin-bottom: 0px;
     height: 100pt;
 }
 
-#heroButtons {
-    position: absolute;
+#hero {
+    position: fixed;
 }
-#heroButtons .custombtn {
+#hero .custombtn {
     margin: auto;
 }
 
@@ -50,7 +113,7 @@ h1 {
 .custombtn {
     width: fit-content;
     cursor: pointer;
-    border: 1px solid rgba(1,1,1,0);
+    border: 1px solid rgba(0, 0, 0, 0);
     align-content: center;
     display: flex;
     transition: all ease-in 100ms;
@@ -70,4 +133,54 @@ h1 {
     margin: auto;
     font-family: 'Teko', sans-serif;
     font-size: 30pt;
+}
+
+
+
+
+
+.border-lines {
+    background-color: rgba(0,0,0,0);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: grid;
+    justify-content: space-around;
+    grid-template-columns: auto auto auto;
+    align-content: space-evenly;
+}
+.border-lines img {
+    width: 50px;
+    height: auto;
+}
+
+#scrollPos {
+    color: var(--hero);
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 25pt;
+    left: 20px;
+    top: 20px;
+    margin: 0px;
+}
+
+
+#upPage {
+    position: absolute;
+    z-index: 50;
+    visibility: hidden;
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 25pt;
+    margin: auto;
+    width: 100vw;
+    border: none;
+    background-color: rgba(255, 0, 0, 0);
+    cursor: pointer;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- https://www.svgrepo.com/collection/fluent-ui-icons-outlined/3 -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,22 +11,239 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    
-    <div id="heroiframe">
-        <iframe style="height: 100%; width:100%;" src="./Demos/Boids/Boids.html" frameborder="0"></iframe>
-    </div>
-    <div id="heroButtons">
-        <h1 class="heroTitle">CARLING</h1>
-        <!-- <div class="custombtn left">
-            <p>ABOUT</p>
+<body onload="init()">
+
+    <p style="position: absolute; z-index: 100;" id="scrollPos">00</p>
+    <button id="upPage" >
+    </button>
+
+    <div class="section dark active-section" id="section1">
+
+        <div class="border-lines">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
         </div>
-        <div class="custombtn right">
-            <p>PIECES</p>
-        </div> -->
+
+
+        <div class="info-pane-container">
+            <div class="info-pane">
+                <p>Boids experiment</p>
+                <div class="info-grid">
+                    <div>A</div>
+                    <div>COMPLETED</div>
+                    <div>10 . 3 . 22</div>
+
+                    <div>B</div>
+                    <div>LANGUAGE</div>
+                    <div>THREE JS</div>
+
+                    <div>C</div>
+                    <div>TYPE</div>
+                    <div>EXPERIMENT</div>
+                </div>
+
+                <p class="write-up">Click here to see brief write-up <br> THREE js</p>
+                <div class="contact">
+                    <div>aidanc@internode.on.net</div>
+                    <div>0403915079</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="hero">
+            <h1 class="heroTitle">CARLING</h1>
+        </div>
+        <div id="heroiframe"></div>
     </div>
 
 
 
+
+
+
+
+    <div class="section light staged-section" id="section2">
+        <div class="info-pane-container">
+            <div class="info-pane">
+                <p>Experiment 2</p>
+                <div class="info-grid">
+                    <div>A</div>
+                    <div>COMPLETED</div>
+                    <div>5 . 4 . 22</div>
+
+                    <div>B</div>
+                    <div>LANGUAGE</div>
+                    <div>THREE JS</div>
+
+                    <div>C</div>
+                    <div>TYPE</div>
+                    <div>EXPERIMENT</div>
+                </div>
+
+                <p class="write-up">Click here to see brief write-up <br> THREE js</p>
+                <div class="contact">
+                    <div>aidanc@internode.on.net</div>
+                    <div>0403915079</div>
+                </div>
+            </div>
+        </div>
+        <div id="hero">
+            <h1 class="heroTitle">01</h1>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="section dark inactive-section" id="section3">
+
+        <div class="border-lines">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+            <img src="./Assets/add-svgrepo-com.svg">
+        </div>
+
+
+        <div class="info-pane-container">
+            <div class="info-pane">
+                <p>Planet experiment</p>
+                <div class="info-grid">
+                    <div>A</div>
+                    <div>COMPLETED</div>
+                    <div>10 . 3 . 22</div>
+
+                    <div>B</div>
+                    <div>LANGUAGE</div>
+                    <div>THREE JS</div>
+
+                    <div>C</div>
+                    <div>TYPE</div>
+                    <div>EXPERIMENT</div>
+                </div>
+
+                <p class="write-up">Click here to see brief write-up <br> THREE js</p>
+                <div class="contact">
+                    <div>aidanc@internode.on.net</div>
+                    <div>0403915079</div>
+                </div>
+            </div>
+        </div>
+        <div id="hero">
+            <h1 class="heroTitle">02</h1>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="section light inactive-section" id="section4">
+        <div id="hero">
+            <h1 class="heroTitle">03</h1>
+        </div>
+    </div>
+
+
+    <script src="./Demos/Boids/perlin-noise-3d.js"></script>
+    <script src="./Demos/THREE.js"></script>
+    <script src="./Demos/Boids/boids.js"></script>
+    <script src="./Demos/Boids/index.js"></script>
+
+
+    <script>
+        // TODO : add stick after you reach new page (have an extra like 20% page scroll to scroll)
+        //              can timeout, i.e if you dont use up that 20% extra in like 4 seconds 
+        //              then get rid of the stick
+
+        var pageUpButton = document.getElementById("upPage");
+
+        var scrollSpeed = .1;
+        var scrollPos = 0;
+        var sections = [...document.getElementsByClassName("section")];
+        var activeSection = 0;
+
+        var isDark = true;
+
+        function changeSection(toSection) {
+            document.getElementsByClassName("staged-section")[0].style.top = null;
+
+            let currentStaged = (activeSection + 1) % sections.length;
+            var nextStaged = (toSection + 1) % sections.length;
+
+            sections[activeSection].classList.remove("active-section");
+            sections[activeSection].classList.add("inactive-section");
+
+            sections[currentStaged].classList.remove("staged-section");
+            sections[currentStaged].classList.add("inactive-section");
+
+
+            sections[toSection].classList.add("active-section");
+            sections[nextStaged].classList.add("staged-section");
+            sections[toSection].classList.remove("inactive-section");
+            sections[nextStaged].classList.remove("inactive-section");
+
+            activeSection = toSection;
+
+            isDark = sections[activeSection].classList.contains("dark") ? true : false
+
+            scrollPos = 0;
+        }
+
+        pageUpButton.onclick = () => {
+            changeSection(activeSection-1);
+            if(activeSection > 0) {
+                pageUpButton.style.visibility = "visible"
+            } else {
+                pageUpButton.style.visibility = "hidden"
+            }
+        }
+
+        window.addEventListener("wheel", (event) => {
+            scrollPos = Math.min(100, Math.max(0 ,scrollPos + (event.deltaY * scrollSpeed)));
+            var displayNumber = Math.floor(scrollPos).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
+            document.getElementById("scrollPos").innerText = displayNumber;
+            document.getElementsByClassName("staged-section")[0].style.top = `${100 - Math.round(scrollPos)}vh`;
+
+            if(scrollPos < 15 && activeSection > 0) {
+                pageUpButton.style.visibility = "visible"
+            } else {
+                pageUpButton.style.visibility = "hidden"
+            }
+
+            //SWAP OUT
+            if(scrollPos == 100) {
+                changeSection((activeSection+1) % sections.length)
+            }
+        })
+
+
+
+        function init() {
+            var dark = getComputedStyle(document.documentElement).getPropertyValue('--dark');
+            var light = getComputedStyle(document.documentElement).getPropertyValue('--light');
+            var hero = getComputedStyle(document.documentElement).getPropertyValue('--hero');
+
+            palletFish = Number("0x" + hero.split("#")[1]);
+            sceneSetup();
+        }
+
+    </script>
+    
 </body>
 </html>
