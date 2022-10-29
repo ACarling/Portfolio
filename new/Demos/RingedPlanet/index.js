@@ -57,10 +57,10 @@ class PlanetIndex {
 		directionalLight.shadow.camera.left = side;
 		directionalLight.shadow.camera.right = -side;
 		
-		directionalLight.shadow.mapSize.width = 256; // default
-		directionalLight.shadow.mapSize.height = 256; // default
+		directionalLight.shadow.mapSize.width = 512; // default
+		directionalLight.shadow.mapSize.height = 512; // default
 		directionalLight.shadow.camera.near = 0.1; // default
-		directionalLight.shadow.camera.far = 100; // default
+		directionalLight.shadow.camera.far = 50; // default
 		
 		
 		const al = new THREE.AmbientLight( palletBackground ); // soft white light
@@ -76,6 +76,7 @@ class PlanetIndex {
 		document.getElementById("planet-container").appendChild( this.renderer.domElement );	
 
 		const geometry = new THREE.SphereGeometry(1.8, 32, 16); 
+		
 		const material = new THREE.ShaderMaterial({
 			...PlanetShader,
 			fog: true,
@@ -85,6 +86,7 @@ class PlanetIndex {
 
 		const planet = new THREE.Mesh( geometry, material ); 
 		planet.castShadow = true; //default is false
+		// planet.receiveShadow = true;
 		this.scene.add( planet ); 
 
 
@@ -92,12 +94,15 @@ class PlanetIndex {
 		this.generateField(numberOfAsteroids);
 
 
-		this.camera.position.z = 13;
-		this.camera.position.y = 3;
+		this.camera.position.z = 18;
+		// this.camera.position.y = -3;
 		this.camera.lookAt(0,-5,0);
-		this.camera.translateY(1);
+		this.camera.translateY(2);
+		
+		console.log(planet);
 
 		animationQueue[sectionID].animationFunction = (delta) => {
+			material.uniforms.time.value += delta;
 			AsteroidField.fields.forEach(field => {
 				field.instance.rotation.y += field.orbitSpeed;
 			})

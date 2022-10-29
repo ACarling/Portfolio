@@ -49,7 +49,7 @@ class AsteroidField {
             ...AsteroidShader,
             fog: false,
             lights: true,
-            dithering: true
+            dithering: true,
         });
     
         this.instance = new THREE.InstancedMesh(asteroidGeometry, asteroidMaterial, this.numAsteroids);
@@ -57,6 +57,8 @@ class AsteroidField {
         this.scene.add( this.instance );
     
         this.instance.receiveShadow = true;
+        // this.instance.castShadow = true;
+
         setAsteroidFieldPositions(this.instance, this.orbitRadius, this.fieldHeight, this.fieldWidth);
     }
 }

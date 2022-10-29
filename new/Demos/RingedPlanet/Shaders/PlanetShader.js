@@ -46,8 +46,6 @@ const PlanetShader = {
             #endif
 
             ${THREE.ShaderChunk["shadowmap_vertex"]}
-            ${THREE.ShaderChunk["fog_vertex"]}
-
         }
     `,
     
@@ -82,15 +80,22 @@ const PlanetShader = {
             vec3 lightDir = normalize(light.direction);
             float nDotL = max(0.0,dot(vNormal, lightDir));
 
-            float noise = snoise3d(vec3(0,WSpos.y,0));
 
-            vec3 col = mix(colora, colorb, noise);
 
-            vec3 finalDiffuse = mix(col, colorDark, (1.0-nDotL));
+            float noise = snoise3d((vec3(WSpos.x, WSpos.y, WSpos.z) / .3));
 
+            // vec3 col = mix(colora, colorb, noise);
+
+            float ringShadowMask = round(1.0 - abs(OSpos.y * 2.8 + (noise / 3.0)));
+
+            float planetShadow = round((1.0-nDotL) / 1.9);
+            float shadowMask = planetShadow; //max(planetShadow, ringShadowMask);
+
+            vec3 finalDiffuse = mix(colora, colorDark, shadowMask);
+
+            // finalDiffuse = vec3(ringShadowMask);
 
             gl_FragColor = vec4(finalDiffuse,1.0);
-            #include <fog_fragment>
         }
     `
 };
