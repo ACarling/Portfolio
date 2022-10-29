@@ -14,11 +14,17 @@ function animate() {
 	renderer.render( scene, camera ); 
 } 
 
-document.body.onresize = (ev) => {
+
+resizeFunctions.push(() => {
+	var ctx = document.querySelector("#herocanvas>canvas");
+	ctx.width  = window.innerWidth;
+	ctx.height = window.innerHeight;
+
 	camera.aspect = window.innerWidth/window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
-}
+})
+
 
 function sceneSetup() {
 	boidController = new BoidController();
@@ -27,9 +33,7 @@ function sceneSetup() {
 	renderer.setClearColor( palletBackground, 0 );
 	
 	renderer.setSize( window.innerWidth, window.innerHeight ); 
-	console.log(document.getElementById("heroiframe"));
-	document.getElementById("heroiframe").appendChild( renderer.domElement );
-	
+	document.getElementById("herocanvas").appendChild( renderer.domElement );  
 	animate();
 }
 

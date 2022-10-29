@@ -13,11 +13,13 @@
 </head>
 <body onload="init()">
 
-    <p style="position: absolute; z-index: 100;" id="scrollPos">00</p>
+    <p style="position: fixed; z-index: 100;" id="scrollPos">00</p>
     <button id="upPage" >
     </button>
 
     <div class="section dark active-section" id="section1">
+        <!-- <p class="background-number">00</p>
+        <p class="page-number">1 : 4</p> -->
 
         <div class="border-lines">
             <img src="./Assets/add-svgrepo-com.svg">
@@ -33,23 +35,23 @@
             <div class="info-pane">
                 <p>Boids experiment</p>
                 <div class="info-grid">
-                    <div>A</div>
+                    <div>X</div>
                     <div>COMPLETED</div>
                     <div>10 . 3 . 22</div>
 
-                    <div>B</div>
+                    <div>X</div>
                     <div>LANGUAGE</div>
                     <div>THREE JS</div>
 
-                    <div>C</div>
+                    <div>X</div>
                     <div>TYPE</div>
                     <div>EXPERIMENT</div>
                 </div>
 
                 <p class="write-up">Click here to see brief write-up <br> THREE js</p>
                 <div class="contact">
-                    <div>aidanc@internode.on.net</div>
-                    <div>0403915079</div>
+                    <p>aidanc@internode.on.net</p>
+                    <p>0403915079</p>
                 </div>
             </div>
         </div>
@@ -58,7 +60,7 @@
         <div id="hero">
             <h1 class="heroTitle">CARLING</h1>
         </div>
-        <div id="heroiframe"></div>
+        <div id="herocanvas"></div>
     </div>
 
 
@@ -68,32 +70,33 @@
 
 
     <div class="section light staged-section" id="section2">
+
         <div class="info-pane-container">
             <div class="info-pane">
-                <p>Experiment 2</p>
+                <p>FOLIO</p>
                 <div class="info-grid">
-                    <div>A</div>
+                    <div>X</div>
                     <div>COMPLETED</div>
-                    <div>5 . 4 . 22</div>
+                    <div>UNDER CONSTRUCTION</div>
 
-                    <div>B</div>
+                    <div>X</div>
                     <div>LANGUAGE</div>
-                    <div>THREE JS</div>
+                    <div>HTML/JS</div>
 
-                    <div>C</div>
+                    <div>X</div>
                     <div>TYPE</div>
                     <div>EXPERIMENT</div>
                 </div>
 
                 <p class="write-up">Click here to see brief write-up <br> THREE js</p>
                 <div class="contact">
-                    <div>aidanc@internode.on.net</div>
-                    <div>0403915079</div>
+                    <p>aidanc@internode.on.net</p>
+                    <p>0403915079</p>
                 </div>
             </div>
         </div>
         <div id="hero">
-            <h1 class="heroTitle">01</h1>
+            <h1 class="heroTitle">02</h1>
         </div>
     </div>
 
@@ -120,28 +123,28 @@
             <div class="info-pane">
                 <p>Planet experiment</p>
                 <div class="info-grid">
-                    <div>A</div>
+                    <div>X</div>
                     <div>COMPLETED</div>
-                    <div>10 . 3 . 22</div>
+                    <div>UNDER CONSTRUCTION</div>
 
-                    <div>B</div>
+                    <div>X</div>
                     <div>LANGUAGE</div>
                     <div>THREE JS</div>
 
-                    <div>C</div>
+                    <div>X</div>
                     <div>TYPE</div>
                     <div>EXPERIMENT</div>
                 </div>
 
                 <p class="write-up">Click here to see brief write-up <br> THREE js</p>
                 <div class="contact">
-                    <div>aidanc@internode.on.net</div>
-                    <div>0403915079</div>
+                    <p>aidanc@internode.on.net</p>
+                    <p>0403915079</p>
                 </div>
             </div>
         </div>
         <div id="hero">
-            <h1 class="heroTitle">02</h1>
+            <h1 class="heroTitle">03</h1>
         </div>
     </div>
 
@@ -155,9 +158,26 @@
 
     <div class="section light inactive-section" id="section4">
         <div id="hero">
-            <h1 class="heroTitle">03</h1>
+            <h1 class="heroTitle">04</h1>
         </div>
     </div>
+    <!-- 
+    <div class="section dark inactive-section" id="section4">
+        <div id="hero">
+            <h1 class="heroTitle">05</h1>
+        </div>
+    </div>
+    <div class="section light inactive-section" id="section4">
+        <div id="hero">
+            <h1 class="heroTitle">06</h1>
+        </div>
+    </div> -->
+
+
+    <script>
+
+        var resizeFunctions = [];
+    </script>
 
 
     <script src="./Demos/Boids/perlin-noise-3d.js"></script>
@@ -165,83 +185,53 @@
     <script src="./Demos/Boids/boids.js"></script>
     <script src="./Demos/Boids/index.js"></script>
 
+    <script src="./customScroll.js"></script>
 
     <script>
-        // TODO : add stick after you reach new page (have an extra like 20% page scroll to scroll)
-        //              can timeout, i.e if you dont use up that 20% extra in like 4 seconds 
-        //              then get rid of the stick
-
-        var pageUpButton = document.getElementById("upPage");
-
-        var scrollSpeed = .1;
-        var scrollPos = 0;
-        var sections = [...document.getElementsByClassName("section")];
-        var activeSection = 0;
-
-        var isDark = true;
-
-        function changeSection(toSection) {
-            document.getElementsByClassName("staged-section")[0].style.top = null;
-
-            let currentStaged = (activeSection + 1) % sections.length;
-            var nextStaged = (toSection + 1) % sections.length;
-
-            sections[activeSection].classList.remove("active-section");
-            sections[activeSection].classList.add("inactive-section");
-
-            sections[currentStaged].classList.remove("staged-section");
-            sections[currentStaged].classList.add("inactive-section");
 
 
-            sections[toSection].classList.add("active-section");
-            sections[nextStaged].classList.add("staged-section");
-            sections[toSection].classList.remove("inactive-section");
-            sections[nextStaged].classList.remove("inactive-section");
-
-            activeSection = toSection;
-
-            isDark = sections[activeSection].classList.contains("dark") ? true : false
-
-            scrollPos = 0;
-        }
-
-        pageUpButton.onclick = () => {
-            changeSection(activeSection-1);
-            if(activeSection > 0) {
-                pageUpButton.style.visibility = "visible"
-            } else {
-                pageUpButton.style.visibility = "hidden"
-            }
-        }
-
-        window.addEventListener("wheel", (event) => {
-            scrollPos = Math.min(100, Math.max(0 ,scrollPos + (event.deltaY * scrollSpeed)));
-            var displayNumber = Math.floor(scrollPos).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
-            document.getElementById("scrollPos").innerText = displayNumber;
-            document.getElementsByClassName("staged-section")[0].style.top = `${100 - Math.round(scrollPos)}vh`;
-
-            if(scrollPos < 15 && activeSection > 0) {
-                pageUpButton.style.visibility = "visible"
-            } else {
-                pageUpButton.style.visibility = "hidden"
-            }
-
-            //SWAP OUT
-            if(scrollPos == 100) {
-                changeSection((activeSection+1) % sections.length)
-            }
+        resizeFunctions.push(() => {
+            var screenHeight = `${window.innerHeight}px`;
+            document.documentElement.style.setProperty('--display-height', screenHeight);
         })
 
 
-
         function init() {
+
+            for (let i = 0; i < sections.length; i++) {
+                var displayNumber = (i+1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
+                var bn = document.createElement("p");
+                bn.classList.add("background-number");
+                bn.innerText = displayNumber;
+                var pn = document.createElement("p");
+                pn.classList.add("page-number");
+                pn.innerText = `${i + 1} of ${sections.length}`
+                sections[i].prepend(bn)
+                sections[i].prepend(pn)
+            }
+
             var dark = getComputedStyle(document.documentElement).getPropertyValue('--dark');
             var light = getComputedStyle(document.documentElement).getPropertyValue('--light');
             var hero = getComputedStyle(document.documentElement).getPropertyValue('--hero');
 
+
+
             palletFish = Number("0x" + hero.split("#")[1]);
             sceneSetup();
+
+            resizeFunctions.forEach(u => {
+                u();
+            })
+
         }
+
+        window.onresize = function() {
+            resizeFunctions.forEach(u => {
+                u();
+            })
+        }
+        // <p class="background-number">00</p>
+        // <p class="page-number">1 : 4</p>
 
     </script>
     
