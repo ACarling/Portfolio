@@ -1,5 +1,5 @@
 const noise = new perlinNoise3d();
-const palletBackground = 0x2e2c36
+const palletBackground = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--dark-mod').split("#")[1]);
 
 let valueChanged = false;
 
@@ -24,7 +24,6 @@ let initial_homingFactor = 0.0005;
 
 
 var b = [];
-var tankMaterial;
 let boidMaterial;
 class BoidController {
     // Size of canvas. These get updated to fill the whole browser.
@@ -49,12 +48,17 @@ class BoidController {
 
     boids = [];
 
+    camera;
+    scene;
 
-    constructor() {
+
+    constructor(camera, scene) {
+        this.camera = camera;
+        this.scene = scene;
 
         this.width = window.innerWidth/50;
         this.height = window.innerHeight/50;
-        camera.position.z = this.depth + .5 * Math.min(this.height, this.width);
+        this.camera.position.z = this.depth + .5 * Math.min(this.height, this.width);
 
         let geometry = new THREE.ConeGeometry(1 * this.boidSize, 4 * this.boidSize,32); 
         boidMaterial = new THREE.MeshBasicMaterial( { color: palletFish } );
@@ -64,7 +68,7 @@ class BoidController {
            
             let BoidGeom = new THREE.Mesh( geometry, boidMaterial ); //
 
-            scene.add( BoidGeom ); 
+            this.scene.add( BoidGeom ); 
             BoidGeom.castShadow = true; //default is false
             BoidGeom.receiveShadow = false; //default
             

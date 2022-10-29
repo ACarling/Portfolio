@@ -26,9 +26,11 @@ class AsteroidField {
     fieldHeight;
     fieldWidth;
     numAsteroids;
+    scene;
 
     
-    constructor(orbitRadius, numAsteroids, colour, orbitSpeed, fieldHeight, fieldWidth) {
+    constructor(scene, orbitRadius, numAsteroids, colour, orbitSpeed, fieldHeight, fieldWidth) {
+        this.scene = scene
         this.orbitSpeed = orbitSpeed;
         this.orbitRadius = orbitRadius;
         this.colour = colour;
@@ -47,12 +49,12 @@ class AsteroidField {
             ...AsteroidShader,
             fog: false,
             lights: true,
-            dithering: true,
+            dithering: true
         });
     
         this.instance = new THREE.InstancedMesh(asteroidGeometry, asteroidMaterial, this.numAsteroids);
         this.instance.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
-        scene.add( this.instance );
+        this.scene.add( this.instance );
     
         this.instance.receiveShadow = true;
         setAsteroidFieldPositions(this.instance, this.orbitRadius, this.fieldHeight, this.fieldWidth);

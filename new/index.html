@@ -49,7 +49,7 @@
         <div id="hero">
             <h1 class="heroTitle">CARLING</h1>
         </div>
-        <div id="herocanvas"></div>
+        <div id="boid-container" class="herocanvas"></div>
     </div>
 
 
@@ -98,7 +98,6 @@
 
 
     <div class="section dark inactive-section" id="section3">
-
         <div class="info-pane-container">
             <div class="info-pane">
                 <p>Planet experiment</p>
@@ -126,6 +125,7 @@
         <div id="hero">
             <h1 class="heroTitle">03</h1>
         </div>
+        <div id="planet-container" class="herocanvas"></div>
     </div>
 
 
@@ -159,13 +159,27 @@
         var resizeFunctions = [];
     </script>
 
+    <script src="./customScroll.js"></script>
+
+
 
     <script src="./Demos/Boids/perlin-noise-3d.js"></script>
     <script src="./Demos/THREE.js"></script>
     <script src="./Demos/Boids/boids.js"></script>
     <script src="./Demos/Boids/index.js"></script>
 
-    <script src="./customScroll.js"></script>
+
+    <script src="./Demos/RingedPlanet/GlobalVar.js"></script>    
+    <script src="./Demos/RingedPlanet/Lib.js"></script>
+    <script src="./Demos/RingedPlanet/OrbitalObject.js"></script>
+    <script src="./Demos/THREE.js"></script>
+    <script src="./Demos/RingedPlanet/Shaders/AsteroidShader.js"></script>
+    <script src="./Demos/RingedPlanet/Shaders/PlanetShader.js"></script>
+    <script>const TMath = THREE.MathUtils;</script>
+    <script src="./Demos/RingedPlanet/GenerateAsteroids.js"></script>
+    <script src="./Demos/RingedPlanet/index.js"></script>
+
+
 
     <script>
 
@@ -177,7 +191,6 @@
 
 
         function init() {
-
             for (let i = 0; i < sections.length; i++) {
                 var displayNumber = (i+1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
                 var bn = document.createElement("p");
@@ -198,8 +211,6 @@
                 sections[i].prepend(bn)
                 sections[i].prepend(pn)
                 sections[i].prepend(crossDecor)
-
-
             }
 
             var dark = getComputedStyle(document.documentElement).getPropertyValue('--dark');
@@ -209,7 +220,8 @@
 
 
             palletFish = Number("0x" + hero.split("#")[1]);
-            sceneSetup();
+            boidBootstrapper.sceneSetup(0);
+            planetBootstrapper.sceneSetup(2);
 
             resizeFunctions.forEach(u => {
                 u();

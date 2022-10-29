@@ -15,6 +15,12 @@
 // make a loading screen
 
 
+
+
+
+
+
+
 var isMobile = false;
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     isMobile = true;
@@ -173,3 +179,33 @@ if(!isMobile) {
 
 }
 
+
+
+var animationQueue = [];
+
+class RenderFunction {
+    animationFunction = null;
+    rendererFunction = null;
+}
+
+sections.forEach(() => {
+    animationQueue.push(new RenderFunction);
+});
+
+var lastDate = Date.now() / 60;
+function animate() {
+    let delta = lastDate - Date.now() / 60;
+    lastDate = Date.now() / 60;
+
+    if(animationQueue[activeSection].animationFunction) {
+        animationQueue[activeSection].animationFunction(delta);
+    }
+
+	requestAnimationFrame( animate );
+
+    if(animationQueue[activeSection].animationFunction) {
+        animationQueue[activeSection].rendererFunction();
+    }
+}
+
+animate();
