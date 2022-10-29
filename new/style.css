@@ -147,15 +147,27 @@ h1 {
     background-color: rgba(0,0,0,0);
     width: 100vw;
     height: var(--display-height);
+
     position: fixed;
     display: grid;
     justify-content: space-around;
     grid-template-columns: auto auto auto;
     align-content: space-evenly;
 }
-.border-lines img {
+.border-lines div {
+    -webkit-mask: url(./Assets/add-svgrepo-com.svg) no-repeat center;
+    mask: url(./Assets/add-svgrepo-com.svg) no-repeat center;
+    -webkit-mask-size: cover;
+    mask-size: cover;
     width: 50px;
-    height: auto;
+    height: 50px;
+}
+.dark .border-lines div {
+    background-color: var(--dark-mod);
+}
+.light .border-lines div {
+    rotate: 45deg;
+    background-color: var(--light-mod);
 }
 
 .page-number {

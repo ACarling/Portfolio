@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <!-- https://www.svgrepo.com/collection/fluent-ui-icons-outlined/3 -->
+    <!-- https://www.svgrepo.com/collection/floral-design/ -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,18 +19,6 @@
     </button>
 
     <div class="section dark active-section" id="section1">
-        <!-- <p class="background-number">00</p>
-        <p class="page-number">1 : 4</p> -->
-
-        <div class="border-lines">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-        </div>
-
 
         <div class="info-pane-container">
             <div class="info-pane">
@@ -71,6 +60,7 @@
 
     <div class="section light staged-section" id="section2">
 
+
         <div class="info-pane-container">
             <div class="info-pane">
                 <p>FOLIO</p>
@@ -108,16 +98,6 @@
 
 
     <div class="section dark inactive-section" id="section3">
-
-        <div class="border-lines">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-            <img src="./Assets/add-svgrepo-com.svg">
-        </div>
-
 
         <div class="info-pane-container">
             <div class="info-pane">
@@ -206,8 +186,20 @@
                 var pn = document.createElement("p");
                 pn.classList.add("page-number");
                 pn.innerText = `${i + 1} of ${sections.length}`
+
+
+                var crossDecor = document.createElement("div")
+                crossDecor.classList.add("border-lines");
+                for (let j = 0; j < 6; j++) {
+                    let cross = document.createElement("div");
+                    crossDecor.appendChild(cross)                    
+                }
+
                 sections[i].prepend(bn)
                 sections[i].prepend(pn)
+                sections[i].prepend(crossDecor)
+
+
             }
 
             var dark = getComputedStyle(document.documentElement).getPropertyValue('--dark');

@@ -1,4 +1,4 @@
-
+// on apple devices the thingo at the top is coloured red -> should change background color
 // add inertia to mobile
 // if mobile switch section change from scolling thing to a card flicking -> like a deck of cards
 // revisit idea where can scroll up too -> stops at page 0
@@ -7,6 +7,16 @@
 
 // make about page
 //      -> when click about have animation of a diagonal slash go over the page then expand to cover 
+
+// maybe in event calculate speed
+//      instead of in touchend using posiiton to change slide
+//      use speed aswell
+
+
+// add the crosses in dark slides programmatically 
+// add a white slide version of crosses -> im thinking maybe a frame either fancy like or just square
+// make a loading screen
+
 
 var isMobile = false;
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
