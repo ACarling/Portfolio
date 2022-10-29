@@ -12,9 +12,6 @@
 //      instead of in touchend using posiiton to change slide
 //      use speed aswell
 
-
-// add the crosses in dark slides programmatically 
-// add a white slide version of crosses -> im thinking maybe a frame either fancy like or just square
 // make a loading screen
 
 
