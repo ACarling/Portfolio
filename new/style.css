@@ -260,6 +260,9 @@ h1 {
     .section .info-pane :last-child {
         margin-bottom: 0px;
     }
+    .background-number {
+        font-size: 80vw;
+    }
 }
 
 @media only screen and (max-height: 530px) {
