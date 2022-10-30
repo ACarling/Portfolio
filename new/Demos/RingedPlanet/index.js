@@ -72,7 +72,7 @@ class PlanetIndex {
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 		this.renderer.setClearColor( palletDark, 0 );
 		this.renderer.setSize( window.innerWidth, window.innerHeight ); 
-		console.log();
+		
 		document.getElementById("planet-container").appendChild( this.renderer.domElement );	
 
 		const geometry = new THREE.SphereGeometry(1.8, 128, 64); 
@@ -99,7 +99,6 @@ class PlanetIndex {
 		this.camera.lookAt(0,-5,0);
 		this.camera.translateY(2);
 		
-		console.log(planet);
 
 		animationQueue[sectionID].animationFunction = (delta) => {
 			material.uniforms.time.value += delta;

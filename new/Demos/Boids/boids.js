@@ -1,25 +1,3 @@
-const noise = new perlinNoise3d();
-const palletDark = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--dark').split("#")[1]);
-
-let valueChanged = false;
-
-let palletLight = 0x5e84ab
-let palletGround = 0xa1a1a1
-let palletFish = 0xE59500
-let avoidFactor = 0.1; 
-let turnFactor = .1; 
-let centeringFactor = 0.002;
-let matchingFactor = 0.01;
-let homingFactor = 0.0005;
-
-let initial_palletLight = 0x5e84ab
-let initial_palletGround = 0xa1a1a1
-let initial_palletFish = 0x91D3D1
-let initial_avoidFactor = 0.1; 
-let initial_turnFactor = .1; 
-let initial_centeringFactor = 0.002;
-let initial_matchingFactor = 0.01;
-let initial_homingFactor = 0.0005;
 
 
 
@@ -115,12 +93,12 @@ class BoidController {
 
         let dst = new THREE.Vector3(boid.x,boid.y,boid.z).distanceTo(new THREE.Vector3(0,0,0)) / 15;
 // chuck noise(boid.x,boid..y) on this homing factor
-        let noiseScale = .01;
-        let noiseVal = noise.get(boid.x*noiseScale,boid.y+noiseScale,boid.z+noiseScale) * 5;
+        // let noiseScale = .01;
+        // let noiseVal = noise.noise3D(boid.x*noiseScale,boid.y+noiseScale,boid.z+noiseScale) / 50;
 
-        boid.dx += (0 - boid.x) * this.homingFactor * dst * noiseVal;
-        boid.dy += (2 - boid.y) * this.homingFactor * dst * noiseVal;
-        boid.dz += (0 - boid.z) * this.homingFactor * dst * noiseVal;
+        boid.dx += (0 - boid.x) * this.homingFactor * dst;
+        boid.dy += (2 - boid.y) * this.homingFactor * dst;
+        boid.dz += (0 - boid.z) * this.homingFactor * dst;
 
         
 

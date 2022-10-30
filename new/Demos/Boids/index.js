@@ -1,12 +1,3 @@
-
-
-// function animate() { 
-// 	boidBootstrapper.boidController.animationLoop();	
-// 	requestAnimationFrame( animate );
-// 	boidBootstrapper.renderer.render( boidBootstrapper.scene, boidBootstrapper.camera ); 
-// } 
-
-
 class BoidIndex {
 
 	scene = new THREE.Scene(); 
