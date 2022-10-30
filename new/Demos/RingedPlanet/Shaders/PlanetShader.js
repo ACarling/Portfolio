@@ -5,10 +5,11 @@ const PlanetShader = {
             THREE.UniformsLib.shadowmap,
             THREE.UniformsLib.fog,
             {
-                colora: {type: 'vec3', value: new THREE.Color(palletPlanetColoura)},
-                colorb: {type: 'vec3', value: new THREE.Color(palletPlanetColourb)},
+                colora: {type: 'vec3', value: new THREE.Color(palletHero)},
+                colorb: {type: 'vec3', value: new THREE.Color(palletDarkmod)},
 
-                colorDark: {type: 'vec3', value: new THREE.Color(palletBackground)},
+                colorDark: {type: 'vec3', value: new THREE.Color(palletDark)},
+                colorDark2: {type: 'vec3', value: new THREE.Color(palletDarkmod)},
                 ambientLightIntensity: {type: 'float', value: 0},
                 time: {type: 'float', value: 1}
             }
@@ -24,7 +25,15 @@ const PlanetShader = {
         varying vec3 vNormal;
         varying vec2 vUv;
         varying vec3 WSpos;
-        varying vec3 OSpos; 
+        varying vec3 OSpos;
+        
+        ${ShaderLib.Simplex3DNoise()}
+        ${ShaderLib.Orthoganal()}
+
+        float noiseFunction(vec3 pos, float noiseIntensity, float noiseScale) {
+            return snoise3d(pos * noiseScale) * noiseIntensity;
+        }
+
 
         void main() {
             ${THREE.ShaderChunk["begin_vertex"]}
@@ -33,10 +42,31 @@ const PlanetShader = {
             ${THREE.ShaderChunk["project_vertex"]}
             ${THREE.ShaderChunk["worldpos_vertex"]}
 
+
             vNormal = normal;
             OSpos = position;
             vUv = uv;
 
+
+            float noiseScale = 1.2;
+            float noiseIntensity = .09;
+            
+            float offset = 0.1;
+            vec3 tangent = orthogonal(normal);
+            vec3 bitangent = normalize(cross(normal, tangent));
+            vec3 neighbour1 = position + tangent * offset;
+            vec3 neighbour2 = position + bitangent * offset;
+            
+            neighbour1 += noiseFunction(neighbour1, noiseIntensity, noiseScale) * normal;
+            neighbour2 += noiseFunction(neighbour2, noiseIntensity, noiseScale) * normal;
+
+            OSpos += noiseFunction(OSpos, noiseIntensity, noiseScale) * normal;
+
+            vec3 displacedTangent = neighbour1 - OSpos;
+            vec3 displacedBitangent = neighbour2 - OSpos;
+          
+            vNormal = normalize(cross(displacedTangent, displacedBitangent));
+        
             #ifdef USE_INSTANCING
                 WSpos = (instanceMatrix * modelMatrix * vec4(OSpos, 1.0)).xyz;
                 gl_Position = projectionMatrix * viewMatrix * modelMatrix * instanceMatrix * vec4(OSpos, 1.0);
@@ -56,6 +86,7 @@ const PlanetShader = {
         uniform float ambientLightIntensity;
         uniform float time;
         uniform vec3 colorDark;
+        uniform vec3 colorDark2;
 
         ${THREE.ShaderChunk["common"]}
         ${THREE.ShaderChunk["packing"]}
@@ -78,24 +109,31 @@ const PlanetShader = {
             
             DirectionalLight light = directionalLights[0];
             vec3 lightDir = normalize(light.direction);
-            float nDotL = max(0.0,dot(vNormal, lightDir));
+            float nDotL = max(0.0,dot(-vNormal, lightDir));
 
 
 
             float noise = snoise3d((vec3(WSpos.x, WSpos.y, WSpos.z) / .3));
 
-            // vec3 col = mix(colora, colorb, noise);
 
-            float ringShadowMask = round(1.0 - abs(OSpos.y * 2.8 + (noise / 3.0)));
 
-            float planetShadow = round((1.0-nDotL) / 1.9);
-            float shadowMask = planetShadow; //max(planetShadow, ringShadowMask);
+            float mountainMask = saturate(pow(distance(WSpos, vec3(0,0,0)) / 2.0, 40.0) * 25.0);
 
-            vec3 finalDiffuse = mix(colora, colorDark, shadowMask);
+            float planetShadow = saturate(1.0 - pow(saturate(nDotL + .2) * 2.5, .8));
+            vec3 col = mix(colora, mix(colora, vec3(1.0), .6), mountainMask);
 
-            // finalDiffuse = vec3(ringShadowMask);
+            col = mix(col, colorDark2, saturate(1.0 - (planetShadow * 2.0)));
 
-            gl_FragColor = vec4(finalDiffuse,1.0);
+            // if(planetShadow < .5) {
+            //     col = mix(colora, colorDark2, .7);
+            // }
+            // if(planetShadow < .25) {
+            //     col = colorDark2;
+            // }
+
+
+
+            gl_FragColor = vec4(col,1.0);
         }
     `
 };

@@ -1,5 +1,5 @@
 const noise = new perlinNoise3d();
-const palletBackground = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--dark-mod').split("#")[1]);
+const palletDark = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--dark').split("#")[1]);
 
 let valueChanged = false;
 

@@ -252,6 +252,7 @@ h1 {
     .section .info-pane-container {
         width: 100vw;
         justify-content: center;
+        z-index: 2;
     }
     .section .info-pane {
         width: unset;

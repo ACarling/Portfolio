@@ -6,7 +6,8 @@ const AsteroidShader = {
             THREE.UniformsLib.fog,
             {
                 color: {type: 'vec3', value: new THREE.Color(palletFieldColour)},
-                colorDark: {type: 'vec3', value: new THREE.Color(palletBackground)},
+                colorDark: {type: 'vec3', value: new THREE.Color(palletDark)},
+                colorDark2: {type: 'vec3', value: new THREE.Color(palletDarkmod)},
             }
         ]
     ),
@@ -48,6 +49,7 @@ const AsteroidShader = {
     fragmentShader: /* glsl */`
         uniform vec3 color;
         uniform vec3 colorDark;
+        uniform vec3 colorDark2;
 
         ${THREE.ShaderChunk["common"]}
         ${THREE.ShaderChunk["packing"]}
@@ -71,10 +73,10 @@ const AsteroidShader = {
 
 
             // vec3 finalDiffuse = mix(color, colorDark, 1.0-NdotL);
-            vec3 finalDiffuse = mix(color, colorDark, (1.0-getShadowMask()));
+            vec3 finalDiffuse = mix(color, colorDark2, round(1.0-getShadowMask()));
 
 
-            gl_FragColor = vec4(finalDiffuse,(getShadowMask()));
+            gl_FragColor = vec4(finalDiffuse,1.0);
         }
     `
 };

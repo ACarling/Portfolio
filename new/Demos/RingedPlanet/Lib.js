@@ -33,6 +33,14 @@ class ShaderLib {
       `
   }
 
+  static Orthoganal() {
+    return `
+    vec3 orthogonal(vec3 v) {
+      return normalize(abs(v.x) > abs(v.z) ? vec3(-v.y, v.x, 0.0)
+      : vec3(0.0, -v.z, v.y));
+    }`
+  }
+
   static Simplex3DNoise() {
       return `//	Simplex 3D Noise 
       //	by Ian McEwan, Ashima Arts

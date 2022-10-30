@@ -63,19 +63,19 @@ class PlanetIndex {
 		directionalLight.shadow.camera.far = 50; // default
 		
 		
-		const al = new THREE.AmbientLight( palletBackground ); // soft white light
+		const al = new THREE.AmbientLight( palletDark ); // soft white light
 		this.scene.add( al );
 	}
 
 	sceneSetup(sectionID) {
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-		this.renderer.setClearColor( palletBackground, 0 );
+		this.renderer.setClearColor( palletDark, 0 );
 		this.renderer.setSize( window.innerWidth, window.innerHeight ); 
 		console.log();
 		document.getElementById("planet-container").appendChild( this.renderer.domElement );	
 
-		const geometry = new THREE.SphereGeometry(1.8, 32, 16); 
+		const geometry = new THREE.SphereGeometry(1.8, 128, 64); 
 		
 		const material = new THREE.ShaderMaterial({
 			...PlanetShader,
@@ -107,7 +107,7 @@ class PlanetIndex {
 				field.instance.rotation.y += field.orbitSpeed;
 			})
 			
-			sunRotation += delta;
+			sunRotation -= delta;
 			OrbitalObject.orbitalObjects.forEach(oo => {
 				oo.calcPos(sunRotation);
 			});

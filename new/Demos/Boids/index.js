@@ -31,7 +31,7 @@ class BoidIndex {
 		this.boidController = new BoidController(this.camera, this.scene);
 		this.camera.lookAt(0,0,0)
 		
-		this.renderer.setClearColor( palletBackground, 0 );
+		this.renderer.setClearColor( palletDark, 0 );
 		
 		this.renderer.setSize( window.innerWidth, window.innerHeight ); 
 		document.getElementById("boid-container").appendChild( this.renderer.domElement );  

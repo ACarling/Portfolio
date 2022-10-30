@@ -15,6 +15,12 @@
 // make a loading screen
 
 
+// make boids avoid cursor or touch
+// come up with some interaction for planet 
+
+// procedural jellyfish 3js -> tutorial from that ik dude
+// island 3js 
+
 
 
 
