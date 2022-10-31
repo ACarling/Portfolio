@@ -85,11 +85,28 @@ class IslandIndex {
 	}
 
 
+	getNoise(x, y, frequency, octaves, lucunarity, high, low) {
+		let maxAmp = 0;
+		let amp = 1;
+		let noiseVal = 0;
+		let freq = frequency;
+
+		for (let i = 0; i < octaves; i++) {
+			noiseVal += noise.noise2D(x * freq, y * freq) * amp;
+			maxAmp += amp;
+			amp *= lucunarity;
+			freq *= 2;
+		}
+		noiseVal = (noiseVal / maxAmp);
+		return noiseVal * (high - low) / 2 + (high + low) / 2
+	}
+
+
     genIslands(noiseScale, height) {
 
         // let noiseVal = noise.get(noiseScale,noiseScale,noiseScale) * 5;
         
-        const geometry = new THREE.PlaneGeometry( 4, 4, 128, 128 );
+        const geometry = new THREE.PlaneGeometry( 4, 4, 128*2, 128*2 );
 		const material = new THREE.ShaderMaterial({
 			...IslandShader,
 			fog: true,
@@ -100,6 +117,13 @@ class IslandIndex {
         const plane = new THREE.Mesh( geometry, material );
 
 
+		let freq = 1.4;
+		let amp = .4;
+		let transformDown = .26;
+
+		let circleMaskFalloff = 8;
+		let circleMaskSize = 2;
+
         const positions = plane.geometry.attributes.position.array;
         let x, y, z, index;
         x = y = z = index = 0;
@@ -108,15 +132,15 @@ class IslandIndex {
             y = positions[index ++ ];
             z = positions[index ++ ];
 
-            let wl = .4;
-            let amp = 2;
 			//TODO: circle mask here for islands
 			let circleRaw = new THREE.Vector3(x,y,z).distanceTo(new THREE.Vector3(0,0,0));
-			let circle = (Math.pow(2.0 - circleRaw, 4)) / 120;
-            z = noise.noise2D(x / wl, y / wl) * amp * (circle);
-			if(circleRaw > 1.6) {
-				z = 0;
-			}
+
+			
+			let circle = TMath.lerp(1,0,Math.pow(-(circleRaw / circleMaskSize), circleMaskFalloff));
+
+			z = this.getNoise(x, y, freq, 8, .5, amp, 1, 0) * amp * circle;
+			z -= transformDown;
+			
             plane.geometry.attributes.position.setZ(i,z);
         }
         plane.geometry.computeVertexNormals();
