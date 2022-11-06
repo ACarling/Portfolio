@@ -53,13 +53,23 @@ var maxStickAmount = 50;
 var currentStickAmount = 0;
 var stickTimeout = 4000;
 
+function setSectionPosition(scrollPos) {
+    if(scrollPos) {
+        document.getElementsByClassName("staged-section")[0].style.top = `${100 - (scrollPos)}vh`;
+        if(document.getElementsByClassName("prior-section")[0]) {
+            document.getElementsByClassName("prior-section")[0].style.top = `${-100 - (scrollPos)}vh`;
+        }
+    } else {
+        document.getElementsByClassName("staged-section")[0].style.top = null;
+        if(document.getElementsByClassName("prior-section")[0]) {
+            document.getElementsByClassName("prior-section")[0].style.top = null;
+        }    
+    }
+}
+
 
 function changeSection(toSection) {
-    document.getElementsByClassName("staged-section")[0].style.top = null;
-    if(document.getElementsByClassName("prior-section")[0]) {
-        document.getElementsByClassName("prior-section")[0].style.top = null;
-    }
-
+    setSectionPosition(null);
     let currentStaged = (activeSection + 1) % sections.length;
     var nextStaged = (toSection + 1) % sections.length;
 
@@ -116,11 +126,7 @@ function verticalScrollDesktop(deltaY) {
     scrollPos = Math.min(100, Math.max(activeSection == 0 ? 0 : -100, scrollPos + (deltaY * scrollSpeed)));
     var displayNumber = Math.floor(scrollPos).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
     document.getElementById("scrollPos").innerText = displayNumber;
-    document.getElementsByClassName("staged-section")[0].style.top = `${100 - (scrollPos)}vh`;
-    if(document.getElementsByClassName("prior-section")[0]) {
-        document.getElementsByClassName("prior-section")[0].style.top = `${-100 - (scrollPos)}vh`;
-    }
-
+    setSectionPosition(scrollPos);
 
     //SWAP OUT
     if(scrollPos == 100) {
@@ -129,6 +135,9 @@ function verticalScrollDesktop(deltaY) {
     } else if (scrollPos == -100) {
         changeSection((activeSection - 1));
         return true;
+    } else if (Math.floor(scrollPos) == 0) {
+        currentStickAmount = maxStickAmount;
+        setSectionPosition(null);
     }
     return false;
 }
@@ -177,15 +186,26 @@ if(!isMobile) {
         }
         verticalScrollDesktop(deltaY);
     });    
+
+    // window.addEventListener("wheel", (event) => {
+    //     console.log(Math.abs(scrollPos))
+    //     if(Math.abs(scrollPos) < 5) {
+    //         if (event.key == "ArrowDown" || event.key == "ArrowUp") {
+    //             scrollPos = 0;
+    //             verticalScrollDesktop(0);
+    //         }
+    //     }
+    // });
 } else {
     console.log("Is mobile");
+    mousePos = [-500, -500]
 
 
     window.addEventListener("touchmove", (event) => {
         var touchVec = [event.touches[0].screenX, event.touches[0].screenY]
         var delta = [touchStart[0] - touchVec[0], touchStart[1] - touchVec[1]];
         
-        var needTouchReset = verticalScrollDesktop(delta[1] * 2);
+        var needTouchReset = scrollMobile(delta[1] * 2);
         if(needTouchReset) {
             touchStart = touchVec
         }

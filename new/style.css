@@ -194,6 +194,7 @@ h1 {
 .background-number {
     color: var(--dark-mod);
     font-family: var(--font);
+    font-weight: 800;
 
     position: absolute;
     font-size: 50vw;
@@ -201,6 +202,7 @@ h1 {
     margin-block: 0px;
     line-height: 0;
     margin-top: 80vh;
+    
 }
 
 .light .background-number {

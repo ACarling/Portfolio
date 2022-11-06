@@ -8,6 +8,16 @@ let palletFieldColour =   Number("0x" + getComputedStyle(document.documentElemen
 let palletHero = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--hero').split("#")[1]);
 let palletDarkmod = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--dark-mod').split("#")[1]);
 
+let palletWaterDeep = 0x1a5b9c;
+let palletWaterShallow = 0xa4e0da;
+
+
+var mousePos = new THREE.Vector2();
+window.addEventListener("mousemove", (event) => {
+    mousePos.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mousePos.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+})
+
 let fieldRadius = 7;
 let planetSize = 5;
 

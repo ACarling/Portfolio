@@ -28,11 +28,13 @@ class BoidController {
 
     camera;
     scene;
+    mousePositionObject;
 
 
-    constructor(camera, scene) {
+    constructor(camera, scene, mousePositionObject) {
         this.camera = camera;
         this.scene = scene;
+        this.mousePositionObject = mousePositionObject;
 
         this.width = window.innerWidth/50;
         this.height = window.innerHeight/50;
@@ -164,9 +166,21 @@ class BoidController {
                     moveX += boid.x - otherBoid.x;
                     moveY += boid.y - otherBoid.y;
                     moveZ += boid.z - otherBoid.z;
-
                 }
             }
+        }
+
+
+
+        let moisePosAsBoid = {...this.mousePositionObject.position}
+        moisePosAsBoid.z = 0;
+        let boidNoZ = {...boid};
+        boidNoZ.z = 0;
+
+        if (this.distance(boidNoZ, moisePosAsBoid) < 1.5) {
+            moveX += boid.x - this.mousePositionObject.position.x;
+            moveY += boid.y - this.mousePositionObject.position.y;
+            // moveZ += boid.z - this.mousePositionObject.position.z;
         }
 
         boid.dx += moveX * this.avoidFactor;
