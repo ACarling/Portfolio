@@ -24,6 +24,7 @@ body {
 h1 {
     font-family: var(--font), sans-serif;
     font-weight: 800;
+    line-height: .8em;
 }
 
 
@@ -241,6 +242,18 @@ h1 {
 }
 
 
+#about-link {
+    position: absolute;
+    font-family: var(--font);
+    color: var(--hero);
+    font-weight: 800;
+    font-size: 25pt;
+    right: 20px;
+    top: 20px;
+    text-decoration: none;
+    z-index: 500;
+    text-transform: uppercase;
+}
 
 
 
