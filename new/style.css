@@ -68,6 +68,7 @@ h1 {
 .section .info-pane {
     position: fixed;
     font-family: var(--font);
+    font-weight: 400;
     font-size: 16pt;
     line-height: 1em;
     width: 100vw;

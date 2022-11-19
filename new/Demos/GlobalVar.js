@@ -48,3 +48,11 @@ let initial_turnFactor = .1;
 let initial_centeringFactor = 0.002;
 let initial_matchingFactor = 0.01;
 let initial_homingFactor = 0.0005;
+
+
+let isMobile = false
+if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    isMobile = true;
+} else {
+    isMobile = false;
+}

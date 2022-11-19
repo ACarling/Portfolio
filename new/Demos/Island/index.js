@@ -34,6 +34,8 @@ class IslandIndex {
 			this.camera.aspect = window.innerWidth/window.innerHeight;
 			this.camera.updateProjectionMatrix();
 			this.renderer.setSize( window.innerWidth, window.innerHeight );
+			this.renderer.setPixelRatio(window.devicePixelRatio);
+
 		})
 	}
 
@@ -205,7 +207,7 @@ class IslandIndex {
 
 
 		// this.disaplacePlane(this.waterplane, freq, amp, transformDown, circleMaskFalloff, circleMaskSize)
-		// return this.disaplacePlane(islandplane, freq, amp, transformDown, circleMaskFalloff, circleMaskSize);
+		return this.disaplacePlane(islandplane, freq, amp, transformDown, circleMaskFalloff, circleMaskSize);
     }
 
 
