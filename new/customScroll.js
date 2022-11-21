@@ -133,7 +133,7 @@ function verticalScrollDesktop(deltaY) {
 }
 
 function scrollMobile(deltaY) {
-    scrollPos = Math.min(100, Math.max(activeSection == 0 ? 0 : -100, scrollPos + (deltaY * scrollSpeed)));
+    scrollPos = Math.min(100, Math.max(activeSection == 0 ? 0 : -100, scrollPos + ((deltaY * scrollSpeed) / 20)));
     var displayNumber = Math.floor(scrollPos).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
 
 
@@ -218,31 +218,3 @@ if(!isMobile) {
 
 
 
-var animationQueue = [];
-
-class RenderFunction {
-    animationFunction = null;
-    rendererFunction = null;
-}
-
-sections.forEach(() => {
-    animationQueue.push(new RenderFunction);
-});
-
-var lastDate = Date.now() / 60;
-function animate() {
-    let delta = lastDate - Date.now() / 60;
-    lastDate = Date.now() / 60;
-
-    if(animationQueue[activeSection].animationFunction) {
-        animationQueue[activeSection].animationFunction(delta);
-    }
-
-	requestAnimationFrame( animate );
-
-    if(animationQueue[activeSection].animationFunction) {
-        animationQueue[activeSection].rendererFunction();
-    }
-}
-
-animate();

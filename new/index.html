@@ -8,11 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carling</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="loader.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
 </head>
 <body onload="init()">
+
+    <div id="loader">
+        <div class="spinner">Loading...</div>
+    </div>
 
     <p style="position: fixed; z-index: 100;" id="scrollPos">00</p>
     <button id="upPage"></button>
@@ -25,9 +31,6 @@
             <div class="info-pane">
                 <p>WEBGL Boids</p>
                 <div class="info-grid">
-                    <div>X</div>
-                    <div>COMPLETED</div>
-                    <div>10 . 3 . 22</div>
 
                     <div>X</div>
                     <div>LANGUAGE</div>
@@ -41,7 +44,7 @@
                 <p class="write-up">Click here to see brief write-up <br> THREE js</p>
                 <div class="contact">
                     <p>aidanc@internode.on.net</p>
-                    <p>0403915079</p>
+                    
                 </div>
             </div>
         </div>
@@ -66,9 +69,6 @@
             <div class="info-pane">
                 <p>PROCEDURAL ISLANDS</p>
                 <div class="info-grid">
-                    <div>X</div>
-                    <div>COMPLETED</div>
-                    <div>UNDER CONSTRUCTION</div>
 
                     <div>X</div>
                     <div>LANGUAGE</div>
@@ -82,7 +82,7 @@
                 <p class="write-up">Click here to see brief write-up <br> THREE js</p>
                 <div class="contact">
                     <p>aidanc@internode.on.net</p>
-                    <p>0403915079</p>
+                    
                 </div>
             </div>
         </div>
@@ -105,9 +105,6 @@
             <div class="info-pane">
                 <p>Planet experiment</p>
                 <div class="info-grid">
-                    <div>X</div>
-                    <div>COMPLETED</div>
-                    <div>UNDER CONSTRUCTION</div>
 
                     <div>X</div>
                     <div>LANGUAGE</div>
@@ -121,7 +118,7 @@
                 <p class="write-up">Click here to see brief write-up <br> THREE js</p>
                 <div class="contact">
                     <p>aidanc@internode.on.net</p>
-                    <p>0403915079</p>
+                    
                 </div>
             </div>
         </div>
@@ -146,11 +143,11 @@
                 <div class="info-grid">
                     <div>X</div>
                     <div>COMPLETED</div>
-                    <div><a href="https://waterscene.acarling.au/">https://waterscene.acarling.au/</a></div>
+                    <a href="https://waterscene.acarling.au/">https://waterscene</a>
 
                     <div>X</div>
                     <div>LANGUAGE</div>
-                    <div>THREE JS</div>
+                    <div>GLSL</div>
 
                     <div>X</div>
                     <div>TYPE</div>
@@ -160,7 +157,7 @@
                 <p class="write-up">Click here to see brief write-up <br> THREE js</p>
                 <div class="contact">
                     <p>aidanc@internode.on.net</p>
-                    <p>0403915079</p>
+                    
                 </div>
             </div>
         </div>
@@ -190,7 +187,7 @@
         var resizeFunctions = [];
     </script>
 
-
+    <script src="./Demos/stats.min.js"></script>
     <script src="./Demos/THREE.js"></script>
     <script>const TMath = THREE.MathUtils;</script>
 
@@ -199,6 +196,7 @@
     <script src="./Demos/Lib.js"></script>
 
     <script src="./customScroll.js"></script>
+    <script src="./animationDispatcher.js"></script>
 
 
 
@@ -233,6 +231,7 @@
 
 
         function init() {
+            // add numbers and set up scenese
             for (let i = 0; i < sections.length; i++) {
                 var displayNumber = (i+1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
                 var bn = document.createElement("p");
@@ -269,7 +268,11 @@
             resizeFunctions.forEach(u => {
                 u();
             })
+            
+            document.getElementById("loader").classList.add("hidden")
 
+            //TODO: remove, just for testing
+            // changeSection(3)
         }
 
         window.onresize = function() {
@@ -281,6 +284,5 @@
         // <p class="page-number">1 : 4</p>
 
     </script>
-    
 </body>
 </html>

@@ -192,10 +192,6 @@ class ShaderLib {
     }`
   }
 
-
-  static triplanar() {
-      return 
-  }
   
   static farazzshaikhWater() {
     return `
@@ -258,7 +254,7 @@ class ShaderLib {
       n += gln_GerstnerWave(p, F, uTime * 1.1).xzy * 0.1;
       n += gln_GerstnerWave(p, G, uTime * 1.1).xzy * 0.1;
   
-      n += (snoise2d(p * .05 + uTime/50.0) * .5);
+      // n += (snoise2d(p * .05 + uTime/50.0) * .5);
     
     
       return point + n;
@@ -384,15 +380,13 @@ class ShaderLib {
     p1 *= norm.y;
     p2 *= norm.z;
     p3 *= norm.w;
-  
+    
   // Mix final noise value
     vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
     m = m * m;
     return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
                                   dot(p2,x2), dot(p3,x3) ) );
     }
-  
-  
     `
   }
   

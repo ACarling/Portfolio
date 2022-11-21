@@ -27,6 +27,32 @@ h1 {
     line-height: .8em;
 }
 
+@keyframes remove_loader {
+
+    1%   {background-color: var(--dark);}
+    /* 25%  {background-color: yellow;}
+    50%  {background-color: blue;} */
+    99%  {background-color: var(--dark);}
+    100% {visibility: collapse;}
+
+}
+#loader {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--dark);
+    position: absolute;
+    z-index: 1000;
+}
+
+#loader.hidden {
+    animation: remove_loader 2s linear forwards;
+}
+
+.stat-counter {
+    left: calc(50% - 40px);
+}
+
+
 
 .section {
     position: fixed;
@@ -78,14 +104,18 @@ h1 {
     padding: 50px 50px;
     text-transform: uppercase;
 }
+.section .info-pane * {
+    padding: 0px 10px;
+}
 .section .info-pane p {
     margin: 0px;
-    padding: 0px;
+    /* padding: 0px; */
 }
+
 .section .info-pane .info-grid {
     display: grid;
     grid-template-columns: 20px auto auto;
-    grid-column-gap: 50px;
+    grid-column-gap: 10px;
 }
 .section .info-pane .contact {
     text-align: right;

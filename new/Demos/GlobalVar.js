@@ -56,3 +56,12 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
 } else {
     isMobile = false;
 }
+
+const remove_loader_animation = [
+    {backgroundColor : "red"},
+    {backgroundColor : "green"}
+]
+const remove_loader_animation_timing = {
+    duration: 2000,
+    iterations: 1
+}

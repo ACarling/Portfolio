@@ -28,7 +28,7 @@ class WaveIndex {
 		const cursorObj = new THREE.Object3D();
 		this.scene.add( cursorObj );
 
-		var resolution = isMobile ? 128 : 512
+		var resolution = isMobile ? 64 : 512
 		const geometry = new THREE.PlaneGeometry(150,150,resolution,resolution); 
 		const material = new THREE.ShaderMaterial({
 			...WaveShader,

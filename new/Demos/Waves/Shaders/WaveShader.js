@@ -110,7 +110,7 @@ const WaveShader = {
         //foam
             float foam = OSpos.z + snoise2d(OSpos * .3);
             foam += snoise2d(OSpos * 1.6) / 2.0;
-            foam += snoise2d(OSpos * 3.2) / 4.0;
+            // foam += snoise2d(OSpos * 3.2) / 4.0;
             float foamMask = round((mix(0.0, 1.0, foam)) / 3.0);
             foamMask = clamp(foamMask, 0.0, 1.0);
 
@@ -145,11 +145,11 @@ const WaveShader = {
 
 
         // refraction
-            vec3 vsN = normalMatrix * N * 0.5 + 0.5;
-            vsN = normalize(vsN);
+            // vec3 vsN = normalMatrix * N * 0.5 + 0.5;
+            // vsN = normalize(vsN);
             
-            vec3 refractedUV = refract(V, vsN, 1.0);
-            vec3 refractedDiffuse = texture2D( tDiffuse, mix(viewportPixelCoord, vsN.xy, 0.05) ).rgb;
+            // vec3 refractedUV = refract(V, vsN, 1.0);
+            // vec3 refractedDiffuse = texture2D( tDiffuse, mix(viewportPixelCoord, vsN.xy, 0.05) ).rgb;
 
 
 
