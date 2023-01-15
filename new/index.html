@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Aidan Carling Programmer comupter science student portfolio website">
     
 </head>
 <body onload="init()">
@@ -33,21 +34,24 @@
                 <div class="info-grid">
 
                     <div>X</div>
-                    <div>LANGUAGE</div>
+                    <div>FRAMEWORK</div>
                     <div>THREE JS</div>
 
                     <div>X</div>
                     <div>TYPE</div>
-                    <div>EXPERIMENT</div>
+                    <div>CPU SIMULATION</div>
                 </div>
 
-                <p class="write-up">Click here to see brief write-up <br> THREE js</p>
-                <div class="contact">
-                    <p>aidanc@internode.on.net</p>
-                    
-                </div>
+                <!-- <p class="write-up" id="wrb1">Click here to see brief write-up<br> THREE js</p> -->
             </div>
         </div>
+
+        <!-- <div class="writeup-container" id="wrc1">
+            <p>
+                The website in question features a THREE.js scene that showcases a mesmerizing view of a school of fish, known as Boids, which are rendered using CPU-based calculations. The Boids are simple in their shading, giving an artistic impression to the scene.
+                The Boids are rendered using the popular Boids algorithm, which simulates the movement and behavior of a group of fish. The algorithm takes into account factors such as flocking, steering, and collision avoidance to create a realistic and believable movement of the fish.    
+            </p>
+        </div> -->
 
 
         <div id="hero">
@@ -63,35 +67,33 @@
 
 
     <div class="section light staged-section" id="section2">
-
-
         <div class="info-pane-container">
-            <div class="info-pane">
-                <p>PROCEDURAL ISLANDS</p>
+            <div class="info-pane" style="font-weight: 500;">
+                <p>Procedural Waves</p>
                 <div class="info-grid">
+                    <div>X</div>
+                    <div>FULL FIDELITY</div>
+                    <a href="https://waterscene.acarling.au/">https://waterscene</a>
 
                     <div>X</div>
                     <div>LANGUAGE</div>
-                    <div>THREE JS</div>
+                    <div>GLSL</div>
 
                     <div>X</div>
                     <div>TYPE</div>
-                    <div>GENERATIVE</div>
-                </div>
-
-                <p class="write-up">Click here to see brief write-up <br> THREE js</p>
-                <div class="contact">
-                    <p>aidanc@internode.on.net</p>
-                    
+                    <div>GPU STUDY</div>
                 </div>
             </div>
         </div>
+
+
         <div id="hero">
             <h1 class="heroTitle">02</h1>
         </div>
-        <div id="island-container" class="herocanvas"></div>
+        <div id="wave-container" class="herocanvas"></div>
 
     </div>
+
 
 
 
@@ -112,13 +114,7 @@
 
                     <div>X</div>
                     <div>TYPE</div>
-                    <div>EXPERIMENT</div>
-                </div>
-
-                <p class="write-up">Click here to see brief write-up <br> THREE js</p>
-                <div class="contact">
-                    <p>aidanc@internode.on.net</p>
-                    
+                    <div>GPU STUDY</div>
                 </div>
             </div>
         </div>
@@ -129,57 +125,6 @@
     </div>
 
 
-
-
-
-
-
-
-
-    <div class="section light inactive-section" id="section4">
-        <div class="info-pane-container">
-            <div class="info-pane">
-                <p>Procedural Waves</p>
-                <div class="info-grid">
-                    <div>X</div>
-                    <div>COMPLETED</div>
-                    <a href="https://waterscene.acarling.au/">https://waterscene</a>
-
-                    <div>X</div>
-                    <div>LANGUAGE</div>
-                    <div>GLSL</div>
-
-                    <div>X</div>
-                    <div>TYPE</div>
-                    <div>EXPERIMENT</div>
-                </div>
-
-                <p class="write-up">Click here to see brief write-up <br> THREE js</p>
-                <div class="contact">
-                    <p>aidanc@internode.on.net</p>
-                    
-                </div>
-            </div>
-        </div>
-
-
-        <div id="hero">
-            <h1 class="heroTitle">04</h1>
-        </div>
-        <div id="wave-container" class="herocanvas"></div>
-
-    </div>
-    <!-- 
-    <div class="section dark inactive-section" id="section4">
-        <div id="hero">
-            <h1 class="heroTitle">05</h1>
-        </div>
-    </div>
-    <div class="section light inactive-section" id="section4">
-        <div id="hero">
-            <h1 class="heroTitle">06</h1>
-        </div>
-    </div> -->
 
 
     <script>
@@ -203,11 +148,6 @@
 
     <script src="./Demos/Boids/boids.js"></script>
     <script src="./Demos/Boids/index.js"></script>
-
-    <script src="./Demos/Island/Shaders/IslandShader.js"></script>
-    <script src="./Demos/Island/Shaders/WaterShader.js"></script>
-    <script src="./Demos/Island/index.js"></script>
-
 
 
     <script src="./Demos/RingedPlanet/OrbitalObject.js"></script>
@@ -253,17 +193,10 @@
                 sections[i].prepend(crossDecor)
             }
 
-            var dark = getComputedStyle(document.documentElement).getPropertyValue('--dark');
-            var light = getComputedStyle(document.documentElement).getPropertyValue('--light');
-            var hero = getComputedStyle(document.documentElement).getPropertyValue('--hero');
 
-
-
-            palletFish = Number("0x" + hero.split("#")[1]);
             boidBootstrapper.sceneSetup(0);
             planetBootstrapper.sceneSetup(2);
-            waveBootstrapper.sceneSetup(3);
-            islandBootstrapper.sceneSetup(1);
+            waveBootstrapper.sceneSetup(1);
 
             resizeFunctions.forEach(u => {
                 u();
@@ -272,13 +205,19 @@
             document.getElementById("loader").classList.add("hidden")
 
             //TODO: remove, just for testing
-            // changeSection(3)
+            changeSection(0)
         }
 
         window.onresize = function() {
             resizeFunctions.forEach(u => {
                 u();
             })
+        }
+
+        window.onclick = function(event) {
+            if(event.target.classList.contains("write-up")) {
+                console.log("write up")
+            }
         }
         // <p class="background-number">00</p>
         // <p class="page-number">1 : 4</p>

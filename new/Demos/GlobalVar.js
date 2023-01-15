@@ -3,10 +3,20 @@ let asteroidField = [];
 let valueChange = true;
 
 const noise = new SimplexNoise();
-let palletDark = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--dark').split("#")[1]);
-let palletFieldColour =   Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--light').split("#")[1]);
-let palletHero = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--hero').split("#")[1]);
-let palletDarkmod = Number("0x" + getComputedStyle(document.documentElement).getPropertyValue('--dark-mod').split("#")[1]);
+
+let cssDark = getComputedStyle(document.documentElement).getPropertyValue('--dark')
+let cssLight = getComputedStyle(document.documentElement).getPropertyValue('--light')
+let cssHero = getComputedStyle(document.documentElement).getPropertyValue('--hero')
+let cssDarkMod = getComputedStyle(document.documentElement).getPropertyValue('--dark-mod')
+let cssLightMod = getComputedStyle(document.documentElement).getPropertyValue('--light-mod')
+
+
+
+let palletDark = Number("0x" + cssDark.split("#")[1]);
+let palletFieldColour =   Number("0x" + cssLight.split("#")[1]);
+let palletHero = Number("0x" + cssHero.split("#")[1]);
+let palletDarkmod = Number("0x" + cssDarkMod.split("#")[1]);
+let palletLightmod = Number("0x" + cssLightMod.split("#")[1]);
 
 let palletWaterDeep = 0x1a5b9c;
 let palletWaterShallow = 0xa4e0da;
@@ -33,7 +43,7 @@ let valueChanged = false;
 
 let palletLight = 0x5e84ab
 let palletGround = 0xa1a1a1
-let palletFish = 0xE59500
+let palletFish = palletHero
 let avoidFactor = 0.1; 
 let turnFactor = .1; 
 let centeringFactor = 0.002;

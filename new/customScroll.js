@@ -87,6 +87,12 @@ function changeSection(toSection) {
     activeSection = toSection;
 
     isDark = sections[activeSection].classList.contains("dark") ? true : false
+    
+    if(isDark) {
+        document.body.style.backgroundColor = cssDark;
+    } else {
+        document.body.style.backgroundColor = cssLight;
+    }
 
     scrollPos = 0;
     var displayNumber = Math.floor(scrollPos).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
