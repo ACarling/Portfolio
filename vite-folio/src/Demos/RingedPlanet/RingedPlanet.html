@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ringed Planet</title>
+
+    <style>
+        body {
+            margin: 0;
+        }
+        .inputContainer {
+            position: absolute;
+            display: grid;
+            z-index: 50000;
+            top: 0;
+            right: 0;
+            justify-items: right;
+        }
+        .inputContainer label {
+            display: block;
+            color: #bdbdbd;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <script src="./GlobalVar.js"></script>    
+    <script src="./Lib.js"></script>
+    <script src="./OrbitalObject.js"></script>
+    <script src="../THREE.js"></script>
+    <script src="./Shaders/AsteroidShader.js"></script>
+    <script src="./Shaders/PlanetShader.js"></script>
+    <script src="./SunShader.js"></script>
+    <script>const THREE.MathUtils = THREE.MathUtils;</script>
+    <script src="./GenerateAsteroids.js"></script>
+    <script src="./index.js"></script>
+
+</body>
+</html>

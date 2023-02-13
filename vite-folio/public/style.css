@@ -206,8 +206,8 @@ h1 {
     align-content: space-evenly;
 }
 .border-lines div {
-    -webkit-mask: url(./Assets/add-svgrepo-com.svg) no-repeat center;
-    mask: url(./Assets/add-svgrepo-com.svg) no-repeat center;
+    -webkit-mask: url(/Assets/add-svgrepo-com.svg) no-repeat center;
+    mask: url(/Assets/add-svgrepo-com.svg) no-repeat center;
     -webkit-mask-size: cover;
     mask-size: cover;
     width: 50px;

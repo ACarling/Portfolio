@@ -7,15 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carling</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="loader.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/loader.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="Aidan Carling Programmer comupter science student portfolio website">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
     
 </head>
-<body onload="init()">
+<body>
 
     <div id="loader">
         <div class="spinner">Loading...</div>
@@ -150,7 +152,7 @@
 
     <!-- <script src="./Demos/stats.min.js"></script>
     <script src="./Demos/THREE.js"></script>
-    <script>const TMath = THREE.MathUtils;</script>
+    <script>const THREE.MathUtils = THREE.MathUtils;</script>
 
     <script src="./Demos/simplex.js"></script>
     <script src="./Demos/GlobalVar.js"></script>    
@@ -179,68 +181,7 @@
     <script src="./Demos/JarCastle/index.js"></script> -->
 
 
-    <script type="module">
-        import * as globalVars from './Demos/GlobalVar.js'
-
-
-        resizeFunctions.push(() => {
-            var screenHeight = `${window.innerHeight}px`;
-            document.documentElement.style.setProperty('--display-height', screenHeight);
-        })
-
-
-        function init() {
-            // add numbers and set up scenese
-            for (let i = 0; i < sections.length; i++) {
-                var displayNumber = (i+1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
-                var bn = document.createElement("p");
-                bn.classList.add("background-number");
-                bn.innerText = displayNumber;
-                var pn = document.createElement("p");
-                pn.classList.add("page-number");
-                pn.innerText = `${i + 1} of ${sections.length}`
-
-
-                var crossDecor = document.createElement("div")
-                crossDecor.classList.add("border-lines");
-                for (let j = 0; j < 6; j++) {
-                    let cross = document.createElement("div");
-                    crossDecor.appendChild(cross)                    
-                }
-                sections[i].prepend(pn)
-                sections[i].prepend(bn)
-                sections[i].prepend(crossDecor)
-            }
-
-
-            boidBootstrapper.sceneSetup(0);
-            planetBootstrapper.sceneSetup(2);
-            waveBootstrapper.sceneSetup(1);
-            castleBootstrapper.sceneSetup(3);
-
-            resizeFunctions.forEach(u => {
-                u();
-            })
-            
-            document.getElementById("loader").classList.add("hidden")
-
-            //TODO: remove, just for testing
-            changeSection(3)
-        }
-
-        window.onresize = function() {
-            resizeFunctions.forEach(u => {
-                u();
-            })
-        }
-
-        window.onclick = function(event) {
-            if(event.target.classList.contains("write-up")) {
-                console.log("write up")
-            }
-        }
-        // <p class="background-number">00</p>
-        // <p class="page-number">1 : 4</p>
+    <script type="module" src="./main.js">
 
     </script>
 </body>
