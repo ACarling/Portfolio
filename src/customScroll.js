@@ -100,7 +100,9 @@ export function changeSection(toSection) {
 
     scrollPos = 0;
     var displayNumber = Math.floor(scrollPos).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
-    document.getElementById("scrollPos").innerText = displayNumber;
+    if(!isMobile) {
+        document.getElementById("scrollPos").innerText = displayNumber;
+    }
 
     currentStickAmount = maxStickAmount;
     setTimeout(() => {
@@ -145,31 +147,6 @@ export function verticalScrollDesktop(deltaY) {
     return false;
 }
 
-export function scrollMobile(deltaY) {
-    scrollPos = Math.min(100, Math.max(activeSection == 0 ? 0 : -100, scrollPos + ((deltaY * scrollSpeed) / 20)));
-    var displayNumber = Math.floor(scrollPos).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
-
-
-    document.getElementById("scrollPos").innerText = displayNumber;
-    document.getElementsByClassName("staged-section")[0].style.top = `${100 - (scrollPos)}vh`;
-    if(document.getElementsByClassName("prior-section")[0]) {
-        document.getElementsByClassName("prior-section")[0].style.top = `${-100 - (scrollPos)}vh`;
-    }
-
-
-    //SWAP OUT
-    if(scrollPos == 100) {
-        changeSection((activeSection+1) % sections.length)
-        return true;
-    } else if (scrollPos == -100) {
-        changeSection((activeSection - 1));
-        return true;
-    }
-    return false;
-}
-
-
-
 
 export function initCustomScroll() {
     
@@ -201,6 +178,7 @@ export function initCustomScroll() {
         pageDownButton.onclick = () => {
             changeSection((activeSection+1) % sections.length);
         }
+        document.getElementById("scrollPos").style.visibility = 'hidden'
     }
     
 }

@@ -94,25 +94,21 @@ class CastleIndex {
 		document.getElementById("castle-container").appendChild( this.renderer.domElement );  
 
 		window.animationQueue[sectionID].animationFunction = (delta) => {
-			if(window.isMobile) {
-				if(this.childScene) {
-					this.childScene.rotation.y += delta / 100;
-				}
-			}
 		};
 
 		window.animationQueue[sectionID].rendererFunction =() => {
+			this.controls.update()
 			this.renderer.render( this.scene, this.camera );
 		};
 		this.renderer.render( this.scene, this.camera ); 
 		
-		if(!window.isMobile) {
-			this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-			this.controls.enableZoom = false;
-			this.controls.maxPolarAngle = Math.PI / 2
-			this.controls.enablePan = false;
-			this.controls.touches.ONE = THREE.TOUCH.DOLLY_ROTATE;	
-		}
+		this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+		this.controls.enableZoom = false;
+		this.controls.maxPolarAngle = Math.PI / 2
+		this.controls.enablePan = false;
+		this.controls.touches.ONE = THREE.TOUCH.DOLLY_ROTATE;	
+		this.controls.autoRotate = true
+		this.controls.autoRotateSpeed = -1.5
 		this.loadGLB();
 	}
 
