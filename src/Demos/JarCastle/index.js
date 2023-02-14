@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
 import {BaseShader} from './Shaders/BaseShader'
 import { GroundShader } from './Shaders/GroundShader';
 import { RockShader } from './Shaders/RockShader';
@@ -15,9 +16,12 @@ class CastleIndex {
 	scene = new THREE.Scene(); 
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); 
 	renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
-	boidController = null;
 	controls = null;
 	directionalLight = null;
+
+	childScene;
+
+	composer;
 
 	constructor() {
 		resizeFunctions.push(() => {
@@ -29,6 +33,7 @@ class CastleIndex {
 			this.camera.updateProjectionMatrix();
 			this.renderer.setSize( window.innerWidth, window.innerHeight );
 			this.renderer.setPixelRatio(window.devicePixelRatio);
+
 		});
 		this.lightSetup();
 	}
@@ -60,6 +65,7 @@ class CastleIndex {
 
 		const al = new THREE.AmbientLight( window.palletDark ); // soft white light
 		this.scene.add( al );
+
 	}
 
 	async sceneSetup(sectionID) {
@@ -70,12 +76,16 @@ class CastleIndex {
 		this.camera.position.x = 0.7797715830893774;
 		this.camera.position.y = 0.18750242280980764;
 		this.camera.position.z = 1.8321569582452666;
+		this.camera.lookAt(0,0,0)
 
 
 		if (window.isMobile) {
 			this.camera.position.x = 0.7797715830893774;
 			this.camera.position.y = 0.18750242280980764;
 			this.camera.position.z = 2.8321569582452666;
+			this.camera.translateY(.5);
+			this.camera.lookAt(0,.5,0)
+
 		}
 
 		this.renderer.setClearColor( window.palletDark, 0 );
@@ -84,22 +94,34 @@ class CastleIndex {
 		document.getElementById("castle-container").appendChild( this.renderer.domElement );  
 
 		window.animationQueue[sectionID].animationFunction = (delta) => {
-			console.log(this.camera.position);
+			if(window.isMobile) {
+				if(this.childScene) {
+					this.childScene.rotation.y += delta / 100;
+				}
+			}
 		};
 
 		window.animationQueue[sectionID].rendererFunction =() => {
-			this.renderer.render( this.scene, this.camera ); 
+			this.renderer.render( this.scene, this.camera );
 		};
 		this.renderer.render( this.scene, this.camera ); 
 		
+		if(!window.isMobile) {
+			this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+			this.controls.enableZoom = false;
+			this.controls.maxPolarAngle = Math.PI / 2
+			this.controls.enablePan = false;
+			this.controls.touches.ONE = THREE.TOUCH.DOLLY_ROTATE;	
+		}
+		this.loadGLB();
+	}
+
+
+
+
+
+	async loadGLB() {
 		
-		this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-		this.controls.enableZoom = false;
-		this.controls.maxPolarAngle = Math.PI / 2
-		this.controls.enablePan = false;
-		this.controls.touches.ONE = THREE.TOUCH.DOLLY_ROTATE;
-
-
 		let glb = await new Promise(resolve => {
 			new GLTFLoader().load('/Castle.glb', resolve)
 		})
@@ -157,7 +179,7 @@ class CastleIndex {
 		rockMat.uniforms.colorb.value = new THREE.Color(0x777777)
 		rockMat.uniforms.lightPosition.value = this.directionalLight.position
 
-
+		this.childScene = glb.scene;
 		glb.scene.children[1].children.forEach(terrainChild => {
 			if(terrainChild.material.name == "Ground") {
 				terrainChild.material = groundMat;
@@ -189,7 +211,6 @@ class CastleIndex {
 				}
 			}
 		});
-
 	}
 }
 
