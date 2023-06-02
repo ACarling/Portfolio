@@ -1,12 +1,13 @@
 :root {
     --dark: #141414;
-    --hero: #E59500;
+    --hero: #E59500; /*#00ff62*/
     --light: #E5DADA;
     --font: 'Teko';
     --dark-mod: #202020;
     --light-mod: #ede4e4;
     --display-height: 100vh;
     --current-font-color: var(--light);
+    --font-outline-width: 2px;
 }
 
 * {
@@ -148,13 +149,19 @@ h1 {
     position: relative;
 }
 
-.heroTitle {
-    font-size: 100pt;
+.hero-title {
+    font-size: 150pt;
     width: 100vw;
     position: fixed;
-    text-align: center;
+    text-align: left;
     margin-bottom: 0px;
     height: 100pt;
+    padding-left: 50px;
+}
+.hero-title.larger {
+    /* font-size: 110pt; */
+    margin-left: 4pt;
+    padding-top: 3pt;
 }
 
 #hero {
@@ -236,6 +243,20 @@ h1 {
 .light .page-number {
     color: var(--dark);
 }
+
+.dark .text-outline {
+    text-shadow: -2px -2px 0 var(--dark-mod), 2px -2px 0 var(--dark-mod), -2px 2px 0 var(--dark-mod), 2px 2px 0 var(--dark-mod);
+    color: var(--dark);
+}
+
+.light .text-outline {
+    text-shadow: -2px -2px 0 var(--light-mod), 2px -2px 0 var(--light-mod), -2px 2px 0 var(--light-mod), 2px 2px 0 var(--light-mod);
+    color: var(--light);
+}
+.light .background-number.text-outline {
+    color: var(--light);
+}
+
 
 .background-number {
     color: var(--dark-mod);
@@ -325,7 +346,7 @@ h1 {
         margin-top: 0px;
         transform: rotate(-90deg);
     }
-    .heroTitle {
+    .hero-title {
         font-size: 6em;
         padding-top: 50px;
     }
@@ -356,7 +377,7 @@ h1 {
 }
 
 @media only screen and (max-height: 530px) {
-    .heroTitle {
+    .hero-title {
         margin-top: 0px;
         font-size: 5em;
     }
@@ -367,6 +388,28 @@ h1 {
         font-size: 1em;
         margin-top: calc(var(--display-height) - 20pt);
     }
+}
+
+
+
+.section.dark.dotted {
+    --dot-size: 3px;
+    --dot-space: 10vw;
+
+    background: 
+        linear-gradient(90deg, var(--dark) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center,
+        linear-gradient(var(--dark) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center, var(--dark-mod);
+    background-size: var(--dot-space) var(--dot-space);
+}
+
+.section.light.dotted {
+    --dot-size: 4px;
+    --dot-space: 10vw;
+
+    background: 
+        linear-gradient(90deg, var(--light) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center,
+        linear-gradient(var(--light) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center, var(--light-mod);
+    background-size: var(--dot-space) var(--dot-space);
 }
 
 

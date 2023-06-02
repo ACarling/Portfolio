@@ -26,6 +26,7 @@ document.body.onload = function init() {
         var displayNumber = (i+1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
         var bn = document.createElement("p");
         bn.classList.add("background-number");
+        bn.classList.add("text-outline");
         bn.innerText = displayNumber;
         var pn = document.createElement("p");
         pn.classList.add("page-number");

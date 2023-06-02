@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { ShaderLib } from '../../Lib';
 import imgUrl from '/noise.png'
-export const PlanetShader = {
+
+export const AtmosphereShader = {
 
     uniforms: THREE.UniformsUtils.merge([
             THREE.UniformsLib.lights,
@@ -9,6 +10,8 @@ export const PlanetShader = {
             THREE.UniformsLib.fog,
             {
                 cloudTex: { type: "sampler2D", value: new THREE.TextureLoader().load( imgUrl ) },
+                planetRotation: {type: 'float', value: 1.8},
+                
                 colora: {type: 'vec3', value: new THREE.Color(window.palletHero)},
                 colorb: {type: 'vec3', value: new THREE.Color(window.palletDarkmod)},
 
@@ -35,11 +38,6 @@ export const PlanetShader = {
         ${ShaderLib.Simplex3DNoise()}
         ${ShaderLib.Orthoganal()}
 
-        float noiseFunction(vec3 pos, float noiseIntensity, float noiseScale) {
-            return snoise3d(pos * noiseScale) * noiseIntensity;
-        }
-
-
         void main() {
             ${THREE.ShaderChunk["begin_vertex"]}
             ${THREE.ShaderChunk["beginnormal_vertex"]}
@@ -47,32 +45,10 @@ export const PlanetShader = {
             ${THREE.ShaderChunk["project_vertex"]}
             ${THREE.ShaderChunk["worldpos_vertex"]}
 
-
             vNormal = normalize(normalMatrix * normal);
             wNormal = normal;
             OSpos = position;
             vUv = uv;
-
-
-            float noiseScale = 3.0;
-            float noiseIntensity = .01;
-            
-            float offset = 0.1;
-            vec3 tangent = orthogonal(normal);
-            vec3 bitangent = normalize(cross(normal, tangent));
-            vec3 neighbour1 = position + tangent * offset;
-            vec3 neighbour2 = position + bitangent * offset;
-            
-            neighbour1 += noiseFunction(neighbour1, noiseIntensity, noiseScale) * normal;
-            neighbour2 += noiseFunction(neighbour2, noiseIntensity, noiseScale) * normal;
-
-            OSpos += noiseFunction(OSpos, noiseIntensity, noiseScale) * normal;
-
-            vec3 displacedTangent = neighbour1 - OSpos;
-            vec3 displacedBitangent = neighbour2 - OSpos;
-          
-            vNormal = normalize(cross(displacedTangent, displacedBitangent));
-            wNormal = vec3(modelMatrix * vec4(vNormal, 0.0));
         
             #ifdef USE_INSTANCING
                 WSpos = (instanceMatrix * modelMatrix * vec4(OSpos, 1.0)).xyz;
@@ -90,12 +66,16 @@ export const PlanetShader = {
         uniform vec3 colora;
         uniform vec3 colorb;
 
+        uniform vec3 planetPosition;
+        uniform float planetRadius;
+
         uniform float ambientLightIntensity;
         uniform float time;
         uniform vec3 colorDark;
         uniform vec3 colorDark2;
 
         uniform sampler2D cloudTex;
+        uniform float planetRotation;
 
         ${THREE.ShaderChunk["common"]}
         ${THREE.ShaderChunk["packing"]}
@@ -106,7 +86,6 @@ export const PlanetShader = {
         ${THREE.ShaderChunk["shadowmask_pars_fragment"]}
         ${THREE.ShaderChunk["dithering_pars_fragment"]}
 
-        ${ShaderLib.Simplex3DNoise()}
 
         varying vec3 vNormal;
         varying vec3 wNormal;
@@ -115,30 +94,50 @@ export const PlanetShader = {
         varying vec3 OSpos; 
 
 
+        vec2 rotateUV(vec2 uv, float rotation)
+        {
+            float mid = 0.5;
+            return vec2(
+                cos(rotation) * (uv.x - mid) + sin(rotation) * (uv.y - mid) + mid,
+                cos(rotation) * (uv.y - mid) - sin(rotation) * (uv.x - mid) + mid
+            );
+        }
+        
+
         void main() {
             
+
+
+            // fresnel
+            vec3 viewDirectionW = normalize(cameraPosition - WSpos);
+            float fresnelTerm = dot(viewDirectionW, wNormal);
+            fresnelTerm = clamp(1.0 - fresnelTerm, 0., 1.);
+            float fresexpon = 2.0;
+            float fresdiv = 1.2;
+            fresnelTerm = pow(((fresnelTerm)/fresdiv), fresexpon);
+
+            // lighting w+wrap
             DirectionalLight light = directionalLights[0];
             vec3 lightDir = normalize(light.direction);
             float nDotL = max(0.0,dot(-wNormal, lightDir));
 
+            float lightexpon = 4.0;
+            float lightdiv = 1.2;
+            float transparency = pow(((1.0-nDotL)/lightdiv), lightexpon);
+
+            transparency -= fresnelTerm;
+
+            vec3 col = mix(colora, colorb, transparency);
 
 
-            // float noise = snoise3d((vec3(WSpos.x, WSpos.y, WSpos.z) / .3));
+            float cloudMask = pow(texture2D(cloudTex, rotateUV(vUv, planetRotation)).r, 4.0);
+            cloudMask *= pow(1.0-nDotL, 4.0);
 
+            col = mix(col, vec3(1.0), cloudMask);
+            transparency = mix(transparency, 1.0, cloudMask);
 
-
-            float mountainMask = saturate(pow(distance(WSpos, vec3(0,0,0)) / 2.0, 40.0) * 25.0);
-
-            float planetShadow = saturate(1.0 - pow(saturate(nDotL + .2) * 2.5, .8));
-            vec3 col = mix(colora, mix(colora, vec3(1.0), .6), mountainMask);
-            col = mix(col, col - vec3(.2), texture2D(cloudTex, vUv).r);
-
-            col = mix(col, colorDark2, saturate(1.0 - (planetShadow * 2.0)));
-
-            // gl_FragColor = vec4(vNormal,1.0);
-
-
-            gl_FragColor = vec4(col,1.0);
+            // gl_FragColor = vec4(vec3(cloudMask), 1.0);
+            gl_FragColor = vec4(col,transparency);
         }
     `
 };

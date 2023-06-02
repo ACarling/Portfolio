@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { ShaderLib } from '../../Lib';
-import imgUrl from '/noise.png'
+
 export const PlanetShader = {
 
     uniforms: THREE.UniformsUtils.merge([
@@ -8,7 +8,6 @@ export const PlanetShader = {
             THREE.UniformsLib.shadowmap,
             THREE.UniformsLib.fog,
             {
-                cloudTex: { type: "sampler2D", value: new THREE.TextureLoader().load( imgUrl ) },
                 colora: {type: 'vec3', value: new THREE.Color(window.palletHero)},
                 colorb: {type: 'vec3', value: new THREE.Color(window.palletDarkmod)},
 
@@ -54,8 +53,8 @@ export const PlanetShader = {
             vUv = uv;
 
 
-            float noiseScale = 3.0;
-            float noiseIntensity = .01;
+            float noiseScale = 1.2;
+            float noiseIntensity = .09;
             
             float offset = 0.1;
             vec3 tangent = orthogonal(normal);
@@ -95,8 +94,6 @@ export const PlanetShader = {
         uniform vec3 colorDark;
         uniform vec3 colorDark2;
 
-        uniform sampler2D cloudTex;
-
         ${THREE.ShaderChunk["common"]}
         ${THREE.ShaderChunk["packing"]}
         ${THREE.ShaderChunk["fog_pars_fragment"]}
@@ -131,12 +128,10 @@ export const PlanetShader = {
 
             float planetShadow = saturate(1.0 - pow(saturate(nDotL + .2) * 2.5, .8));
             vec3 col = mix(colora, mix(colora, vec3(1.0), .6), mountainMask);
-            col = mix(col, col - vec3(.2), texture2D(cloudTex, vUv).r);
 
             col = mix(col, colorDark2, saturate(1.0 - (planetShadow * 2.0)));
 
             // gl_FragColor = vec4(vNormal,1.0);
-
 
             gl_FragColor = vec4(col,1.0);
         }

@@ -65,7 +65,6 @@ class CastleIndex {
 
 		const al = new THREE.AmbientLight( window.palletDark ); // soft white light
 		this.scene.add( al );
-
 	}
 
 	async sceneSetup(sectionID) {
