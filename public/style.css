@@ -199,7 +199,9 @@ h1 {
 
 
 
-
+.background-image {
+    position: fixed;
+}
 
 .border-lines {
     background-color: rgba(0,0,0,0);
