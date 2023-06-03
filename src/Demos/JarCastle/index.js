@@ -78,12 +78,11 @@ class CastleIndex {
 
 
 		if (window.isMobile) {
-			this.camera.position.x = 0.7797715830893774;
-			this.camera.position.y = 0.18750242280980764;
-			this.camera.position.z = 19.8321569582452666;
+			this.camera.position.x = 2.7797715830893774;
+			this.camera.position.y = 2.18750242280980764;
+			this.camera.position.z = -22.8321569582452666;
 			this.camera.translateY(.5);
 			this.camera.lookAt(0,.5,0)
-
 		}
 
 		this.renderer.setClearColor( window.palletDark, 0 );
