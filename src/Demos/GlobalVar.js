@@ -28,16 +28,13 @@ export function initGlobalVars() {
             
     window.valueChange = true;
 
-
     var storedHeroColor = localStorage.getItem("heroColor");
-    console.log(isNaN(storedHeroColor));
-    if(storedHeroColor !== undefined && !isNaN(storedHeroColor)) {
+    if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
         storedHeroColor = parseInt(storedHeroColor);
-        console.log(storedHeroColor % (possibleHeroColors.length - 1));
         var randCol = (storedHeroColor + 1);
         localStorage.setItem("heroColor", randCol % (possibleHeroColors.length - 1))
     } else {
-        randCol = Math.round(Math.random() * (possibleHeroColors.length-1));
+        var randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
         localStorage.setItem("heroColor",randCol)
     }
 

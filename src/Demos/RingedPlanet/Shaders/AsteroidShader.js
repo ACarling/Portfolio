@@ -21,6 +21,7 @@ export const AsteroidShader = {
 
 
         varying vec3 vNormal;
+        varying vec3 wNormal;
         varying vec2 vUv;
         varying vec3 WSpos;
         varying vec3 OSpos; 
@@ -32,7 +33,9 @@ export const AsteroidShader = {
             ${THREE.ShaderChunk["project_vertex"]}
             ${THREE.ShaderChunk["worldpos_vertex"]}
 
-            vNormal = normalize(normalMatrix * normal);
+            vNormal = normal;
+            wNormal = vec3(modelMatrix * vec4(normal, 0.0));
+
             OSpos = position;
             vUv = uv;
 
@@ -63,17 +66,20 @@ export const AsteroidShader = {
         ${THREE.ShaderChunk["dithering_pars_fragment"]}
 
         varying vec3 vNormal;
+        varying vec3 wNormal;
+
         varying vec2 vUv;
         varying vec3 WSpos;
         varying vec3 OSpos;
 
         void main() {
             
-            float NdotL = dot(vNormal, directionalLights[0].direction);
-
+            float NdotL = dot(wNormal, directionalLights[0].direction);
+            NdotL = saturate(NdotL * 2.0);
 
             // vec3 finalDiffuse = mix(color, colorDark, 1.0-NdotL);
             vec3 finalDiffuse = mix(color, colorDark2, round(1.0-getShadowMask()));
+            // vec3 finalDiffuse = mix(color, colorDark2, saturate(round(max(1.0-getShadowMask(), 1.0-NdotL))) );
 
             gl_FragColor = vec4(finalDiffuse,1.0);
         }
