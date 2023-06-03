@@ -54,8 +54,8 @@ export const PlanetShader = {
             vUv = uv;
 
 
-            float noiseScale = 3.0;
-            float noiseIntensity = .01;
+            float noiseScale = 2.0;
+            float noiseIntensity = .02;
             
             float offset = 0.1;
             vec3 tangent = orthogonal(normal);

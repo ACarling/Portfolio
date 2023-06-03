@@ -147,8 +147,9 @@ class PlanetIndex {
 				oo.calcPos(sunRotation);
 			});
 			this.planet.rotation.y += PLANET_ROTATE_SPEED;
-			
-			this.atmosphere.material.uniforms.planetRotation.value += delta / 2500;
+			this.atmosphere.rotation.y += PLANET_ROTATE_SPEED;
+
+			// this.atmosphere.material.uniforms.planetRotation.value += delta / 2500;
 		}
 		window.animationQueue[sectionID].rendererFunction = () => {
 			planetBootstrapper.renderer.render( planetBootstrapper.scene, planetBootstrapper.camera ); 

@@ -45,8 +45,8 @@ export const AtmosphereShader = {
             ${THREE.ShaderChunk["project_vertex"]}
             ${THREE.ShaderChunk["worldpos_vertex"]}
 
-            vNormal = normalize(normalMatrix * normal);
-            wNormal = normal;
+            vNormal = normal;
+            wNormal = vec3(modelMatrix * vec4(normal, 0.0));
             OSpos = position;
             vUv = uv;
         
@@ -130,13 +130,13 @@ export const AtmosphereShader = {
             vec3 col = mix(colora, colorb, transparency);
 
 
-            float cloudMask = pow(texture2D(cloudTex, rotateUV(vUv, planetRotation)).r, 4.0);
+            float cloudMask = pow(texture2D(cloudTex, vUv).r, 4.0) * 2.0;
             cloudMask *= pow(1.0-nDotL, 4.0);
 
-            col = mix(col, vec3(1.0), cloudMask);
+            col = mix(col, vec3(.9), cloudMask);
             transparency = mix(transparency, 1.0, cloudMask);
 
-            // gl_FragColor = vec4(vec3(cloudMask), 1.0);
+            // gl_FragColor = vec4(vec3(), 1.0);
             gl_FragColor = vec4(col,transparency);
         }
     `

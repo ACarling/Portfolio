@@ -12,11 +12,36 @@ export const remove_loader_animation_timing = {
 }
 
 
+var possibleHeroColors = [
+    "#00ff62",
+    "#E59500",
+    "#F93943",
+    "#cc00ff",
+    "#c3ff00",
+    "#00ffe5",
+
+];
+
+
 export function initGlobalVars() {
     window.asteroidField = [];
             
     window.valueChange = true;
 
+
+    var storedHeroColor = localStorage.getItem("heroColor");
+    console.log(isNaN(storedHeroColor));
+    if(storedHeroColor !== undefined && !isNaN(storedHeroColor)) {
+        storedHeroColor = parseInt(storedHeroColor);
+        console.log(storedHeroColor % (possibleHeroColors.length - 1));
+        var randCol = (storedHeroColor + 1);
+        localStorage.setItem("heroColor", randCol % (possibleHeroColors.length - 1))
+    } else {
+        randCol = Math.round(Math.random() * (possibleHeroColors.length-1));
+        localStorage.setItem("heroColor",randCol)
+    }
+
+    document.documentElement.style.setProperty('--hero', possibleHeroColors[randCol]);
 
     window.cssDark = getComputedStyle(document.documentElement).getPropertyValue('--dark')
     window.cssLight = getComputedStyle(document.documentElement).getPropertyValue('--light')

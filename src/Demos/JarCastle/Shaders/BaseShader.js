@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { ShaderLib } from '../../Lib';
+import paintURL from '/robot_paint.png'
+import baseURL from '/robot_base.png'
 
 export const BaseShader = {
 
@@ -8,7 +10,13 @@ export const BaseShader = {
             THREE.UniformsLib.shadowmap,
             THREE.UniformsLib.fog,
             {
-                color : {type: 'vec3', value : new THREE.Color(0xfffff)},
+                paintTex: { type: "sampler2D", value: new THREE.TextureLoader().load( paintURL ) },
+                baseTex: { type: "sampler2D", value: new THREE.TextureLoader().load( baseURL ) },
+                
+                paintColor : {type: 'vec3', value: new THREE.Color(window.palletHero)},
+                rustColor : {type: 'vec3', value: new THREE.Color(0xffffff)},
+                warningColor : {type: 'vec3', value: new THREE.Color(window.palletDarkmod)},
+
             }
         ]
     ),
@@ -20,9 +28,10 @@ export const BaseShader = {
 
 
         varying vec3 vNormal;
+        varying vec3 wNormal;
+
         varying vec2 vUv;
         varying vec3 WSpos;
-        varying vec3 OSpos; 
         varying vec3 vViewPosition;
 
 
@@ -34,16 +43,13 @@ export const BaseShader = {
             ${THREE.ShaderChunk["worldpos_vertex"]}
 
             vNormal = normalize(normalMatrix * normal);
-            OSpos = position;
+            wNormal = vec3(modelMatrix * vec4(normal, 0.0));
+            WSpos = position;
             vUv = uv;
 
-            #ifdef USE_INSTANCING
-                WSpos = (instanceMatrix * modelMatrix * vec4(OSpos, 1.0)).xyz;
-                gl_Position = projectionMatrix * viewMatrix * modelMatrix * instanceMatrix * vec4(OSpos, 1.0);
-            #else
-                WSpos = (modelMatrix * vec4(OSpos, 1.0)).xyz;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(OSpos,1.0);
-            #endif
+            vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_Position = projectionMatrix * modelViewPosition; 
+      
 
 
             ${THREE.ShaderChunk["shadowmap_vertex"]}
@@ -61,35 +67,34 @@ export const BaseShader = {
         ${THREE.ShaderChunk["shadowmask_pars_fragment"]}
         ${THREE.ShaderChunk["dithering_pars_fragment"]}
 
-        uniform vec3 color;
-    
+        uniform sampler2D paintTex;
+        uniform sampler2D baseTex;
+
+        uniform vec3 paintColor;
+        uniform vec3 rustColor;
+        uniform vec3 warningColor;
 
         varying vec3 vNormal;
+        varying vec3 wNormal;
         varying vec2 vUv;
         varying vec3 WSpos;
-        varying vec3 OSpos;
-        ${ShaderLib.Simple2DNoise()}
 
         void main() {
 
-        // circle mask
-            float dist = distance(WSpos.xz, vec2(0.0));
+            vec3 lightDir = normalize(vec3(-20.0, 20.0, 0.0));
+            float nDotL = max(0.0,dot(wNormal, lightDir));
 
-            // dist = 1.0 - pow(dist * .55, 5.0);
-            // dist += (snoise2d(OSpos * .3) / 2.5);
 
-            dist = 1.0 - pow(dist * .55, 5.0);
-            dist += (snoise2d(OSpos * 3.0) / 5.5);
+            vec3 paint = mix(paintColor, vec3(1.0), texture2D(paintTex, vUv).r);
 
-            vec3 circleMask = vec3(dist);
+            vec3 col = mix(texture2D(baseTex, vUv).rgb, warningColor, texture2D(paintTex, vUv).r);
+            col = mix(col, paintColor, texture2D(paintTex, vUv).g);
+            col = mix(col, rustColor, texture2D(paintTex, vUv).b);
 
-            vec3 col = vec3(vUv.x, vUv.y, 0.0);
+            col = mix(warningColor, col, saturate(min(nDotL, getShadowMask()) + .2));
 
-            vec3 finalDiffuse = mix(color, color - .1, 1.0-getShadowMask());
-
-            gl_FragColor = vec4(finalDiffuse, round(circleMask));
-            // gl_FragColor = vec4(round(circleMask), 1.0);
-
+            // gl_FragColor = vec4(vec3(1.0-getShadowMask()), 1.0);
+            gl_FragColor = vec4(col, 1.0);
         }
     `
 };

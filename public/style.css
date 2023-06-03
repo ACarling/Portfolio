@@ -349,6 +349,9 @@ h1 {
     .hero-title {
         font-size: 6em;
         padding-top: 50px;
+        text-align: center;
+        margin-left: 0px;
+        padding-left: 0px;
     }
     .section .info-pane {
         text-transform: uppercase;
@@ -394,7 +397,7 @@ h1 {
 
 .section.dark.dotted {
     --dot-size: 3px;
-    --dot-space: 10vw;
+    --dot-space: 100px;
 
     background: 
         linear-gradient(90deg, var(--dark) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center,
@@ -404,7 +407,7 @@ h1 {
 
 .section.light.dotted {
     --dot-size: 4px;
-    --dot-space: 10vw;
+    --dot-space: 100px;
 
     background: 
         linear-gradient(90deg, var(--light) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center,
