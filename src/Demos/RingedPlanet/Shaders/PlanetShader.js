@@ -143,7 +143,7 @@ export const PlanetShader = {
 
             float cityLightMask = texture2D(cityTex, vUv).r;
 
-            col = mix(mix(colorDark2, vec3(0.871, 0.796, 0.62), cityLightMask), mix(col, vec3(.2), cityLightMask), 1.0-saturate(1.0 - (planetShadow * 2.0))  );
+            col = mix(mix(colorDark2, vec3(0.871, 0.796, 0.62), cityLightMask), mix(col, vec3(.5), cityLightMask), 1.0-saturate(1.0 - (planetShadow * 2.0))  );
 
 
             // gl_FragColor = vec4(cityLightCol,1.0);

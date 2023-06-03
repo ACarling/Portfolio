@@ -16,10 +16,9 @@ var possibleHeroColors = [
     "#00ff62",
     "#E59500",
     "#F93943",
-    "#cc00ff",
+    "#9e4af7",
     "#c3ff00",
     "#00ffe5",
-
 ];
 
 
@@ -37,7 +36,7 @@ export function initGlobalVars(dontChangeColor) {
             randCol = (storedHeroColor + 1);
             localStorage.setItem("heroColor", randCol % (possibleHeroColors.length - 1))
         } else {
-            varrandCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
+            randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
             localStorage.setItem("heroColor",randCol)
         }
     } else {

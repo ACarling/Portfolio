@@ -20,6 +20,8 @@ resizeFunctions.push(() => {
 
 document.body.onload = function init() {
     // add numbers and set up scenese
+
+    
     initCustomScroll();
     initAnimationDispatcher();
     for (let i = 0; i < sections.length; i++) {
@@ -54,6 +56,14 @@ document.body.onload = function init() {
         u();
     })
     
+
+    var to_get_code = [...document.getElementsByClassName("random-code")];
+    to_get_code.forEach(element => {
+        let a = randomCode();
+        element.innerText = randomCode();
+    });
+
+
     document.getElementById("loader").classList.add("hidden")
 
     //TODO: remove, just for testing
@@ -71,5 +81,36 @@ window.onclick = function(event) {
         console.log("write up")
     }
 }
+
+
+
+var safe2LetterCombos = [
+"AX","SG","MR","AO","BL","KB","EI","MF","LH","NG","PT","UA","EF","WX","RN","QO","KC","CC","OS",
+"CK","ET","LP","XE","GR","OX","BE","HG","PR","XT","BQ","CR","AC","TA","GM","QV","FX","FU","HL",
+"OH","WW","LH","TG","FJ","QV","LG","CQ","RP","MC","MK","UP","IE","VP","DX","JL","WP","WJ","DC",
+"ID","MC","US","RG","CL","BF","JC","SP","QI","AG","HF","RH","QO","YF","KM","QE","XV","YM","IC",
+"EC","QB","HG","OV","VX","UB","PQ","UJ","YF","BJ","QP","CT","MP","VJ","PR","JN","AJ","EG","QB",
+"HD","MN","BH","VN","WC"
+];
+var safe3LetterCombos = [
+"OFL","OUY","YVH","WBQ","SKL","NNJ","THL","XKU","WPY","SOK","LNN","LGC","LBE","GBU","SRW","XGM",
+"FCM","FOL","OBM","EVE","EKE","PVH","VXV","JEO","LQR","JXX","BBR","WEP","SKB","HLA","THI","VSK",
+"DFF","NRD","ODI","OPO","PWJ","NHN","WUT","OCG","JBS","MLB","GOG","TFB","IVT","FQP","WXJ","KQV",
+"QIF","OLI","EIG","RNU","QRP","JXP","UJN","WTO","HSI","OQG","PUQ","VJD","QLI","PIU","SNR","FCX",
+"MQQ","NCE","LXS","LIO","REM","RUI","VKQ","ELD","ASM","BFS","LMR","CHW","YQU","EJF","MBS","FVV",
+"YBH","GBK","GVD","PKU","BMG","SLD","GHH","UBN","FFS","VIP","ULY","WGR","IKH","FPT","VRH","UKH",
+"NTX","UBP","PQS","IIX"
+];
+
+function randomCode() {
+    var prefix = Math.round(Math.random() * 1000000);
+    prefix = String(prefix).padStart(8, '0');
+    
+    var mid = safe2LetterCombos[Math.round(Math.random() * safe2LetterCombos.length - 1)];
+    var suffix = safe3LetterCombos[Math.round(Math.random() * safe3LetterCombos.length - 1)] + "_" + String(Math.round(Math.random() * 999)).padStart(5, '0');
+    
+    return prefix + " " + mid + " " + suffix
+}
 // <p class="background-number">00</p>
 // <p class="page-number">1 : 4</p>
+function randomLetter() {return String.fromCharCode(65 + Math.round(Math.random() * 24))}
