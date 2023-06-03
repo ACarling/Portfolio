@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { ShaderLib } from '../../Lib';
 import imgUrl from '/noise.png'
+import cityMap from '/CityMap.png'
+
 export const PlanetShader = {
 
     uniforms: THREE.UniformsUtils.merge([
@@ -9,6 +11,8 @@ export const PlanetShader = {
             THREE.UniformsLib.fog,
             {
                 cloudTex: { type: "sampler2D", value: new THREE.TextureLoader().load( imgUrl ) },
+                cityTex: { type: "sampler2D", value: new THREE.TextureLoader().load( cityMap ) },
+
                 colora: {type: 'vec3', value: new THREE.Color(window.palletHero)},
                 colorb: {type: 'vec3', value: new THREE.Color(window.palletDarkmod)},
 
@@ -96,6 +100,7 @@ export const PlanetShader = {
         uniform vec3 colorDark2;
 
         uniform sampler2D cloudTex;
+        uniform sampler2D cityTex;
 
         ${THREE.ShaderChunk["common"]}
         ${THREE.ShaderChunk["packing"]}
@@ -133,9 +138,15 @@ export const PlanetShader = {
             vec3 col = mix(colora, mix(colora, vec3(1.0), .6), mountainMask);
             col = mix(col, col - vec3(.2), texture2D(cloudTex, vUv).r);
 
-            col = mix(col, colorDark2, saturate(1.0 - (planetShadow * 2.0)));
+            // col = mix(col, colorDark2, saturate(1.0 - (planetShadow * 2.0)));
+            // col = mix(col, vec3(0.871, 0.796, 0.62), texture2D(cityTex, vUv).r);
 
-            // gl_FragColor = vec4(vNormal,1.0);
+            float cityLightMask = texture2D(cityTex, vUv).r;
+
+            col = mix(mix(colorDark2, vec3(0.871, 0.796, 0.62), cityLightMask), mix(col, vec3(.2), cityLightMask), 1.0-saturate(1.0 - (planetShadow * 2.0))  );
+
+
+            // gl_FragColor = vec4(cityLightCol,1.0);
 
 
             gl_FragColor = vec4(col,1.0);

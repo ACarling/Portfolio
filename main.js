@@ -57,7 +57,7 @@ document.body.onload = function init() {
     document.getElementById("loader").classList.add("hidden")
 
     //TODO: remove, just for testing
-    changeSection(0)
+    changeSection(2)
 }
 
 window.onresize = function() {
