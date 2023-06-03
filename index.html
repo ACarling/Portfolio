@@ -29,6 +29,22 @@
 
     <div class="section dark active-section dotted" id="section1">
 
+        <div class="info-slider-container">
+            <div id="info1" onclick="toggleInfo()" class="info-slider closed">
+                <h2>SCENE INFO</h2>
+                <p class="writeup-content">
+                    This scene is built on top of a CPU boid simulation. The fish are controlled by 4 simple rules, separation, alignment, cohesion, and centering.
+                    Each rule has a weight associated with it which defines its importance, the fish will update their state based on the rules by the amount defined by the weight each tick.
+                    <br>
+                    Since this was one of my first ever experiments with Three.js I used it to learn about the webgl renderer, camera, and the three.js api.
+                    <br>
+                    On a desktop fish will try not to swim into your cursor. 
+                </p>
+            </div>
+        </div>
+
+
+
         <div class="info-pane-container">
             <div class="info-pane">
                 <p>WEBGL Boids</p>
@@ -60,6 +76,28 @@
 
 
     <div class="section light staged-section dotted" id="section2">
+        
+        
+        <div class="info-slider-container">
+            <div id="info2" onclick="toggleInfo()" class="info-slider closed">
+                <h2>SCENE INFO</h2>
+                <p class="writeup-content">
+                    For this experiment I started with a single plane and used layered gerstner waves to offset its verticies in a vertex shader.
+                    <br> <br>
+                    The wave color is comprised of a few layers: 
+                    <br>
+                    Firstly a depth fade base color is calculated from the distance of each point on the wave from the original plane.
+                    <br>
+                    Faked subsurface is added on top using the same concepts of lambert lighting but backwards.
+                    <br>
+                    The foam on top of the wave is two noise textures intersecting, they are mixed into the color based on the wave height
+                    <br>
+                    Finally I use a modified specular equation to create the sun highlights on the left side of the ocean  
+                </p>
+            </div>
+        </div>
+
+        
         <div class="info-pane-container">
             <div class="info-pane" style="font-weight: 500;">
                 <p>Procedural Waves</p>
@@ -88,6 +126,29 @@
 
 
     <div class="section dark inactive-section dotted" id="section3">
+
+        <div class="info-slider-container">
+            <div id="info3" onclick="toggleInfo()" class="info-slider closed">
+                <h2>SCENE INFO</h2>
+                <p class="writeup-content">
+                    I started this experiment to learn how to do GPU instancing in webgl. 
+                    <br>
+                    I revisited this project to overhaul the planet shader, and position the camera to be more cinematic. 
+                    <br>
+                    The planet now has a faked atmosphere I created by spawning a slightly larger sphere parented to the main planet and using NdotL, fresnel, and a noise texture to create clouds and the lingering/bleeding light effect at sunrise and sunset.  
+                    <br>
+                    <br>
+                    The planet itself has a slight vertex offset on it created through a 3d noise equation, this make the surface more interesting and fixes bad seams I would get from UV mapping a noise texture onto the sphere.
+                    <br>
+                    <br>
+                    Asteroids seemed like a good starting point. On initialisation the CPU creates an instanced mesh with the number of asteroids wanted.
+                    It then modifies each instances instanceMatrix to scale and position the asteroids in the ring formation. 
+                    The system can easily handle far more asteroids but because of the scenes scale 1000 currently in this scene looked good. 
+                </p>
+            </div>
+        </div>
+
+
         <div class="info-pane-container">
             <div class="info-pane">
                 <p>Planet experiment</p>
@@ -110,9 +171,25 @@
     </div>
 
     <div class="section light inactive-section dotted" id="section4">
+
+        <div class="info-slider-container">
+            <div id="info4" onclick="toggleInfo()" class="info-slider closed">
+                <h2>SCENE INFO</h2>
+                <p class="writeup-content">
+                    This 3d model was created in blender and then textured in substance painter. It has two layers, a base map and a paint map, 
+                    using a custom shader I am able to change the paint map to any values I like (3 channels rgb) allowing me to modulate the war paint, grit, and warning paints based on the current website theme color.
+                    <br>
+                    I used a mostly procedural workflow for the base map. I also used curvature and AO maps for the first pass of the grit layer of the paint mask.
+                    <br>
+                    I then used alpha stamps for the paint before blurring it and subtracting another grit mask to give the paint a worn look.
+                </p>
+            </div>
+        </div>
+
+
         <div class="info-pane-container">
             <div class="info-pane" style="font-weight: 500;">
-                <p>Castle scene</p>
+                <p>Tank scene</p>
                 <div class="info-grid">
                     <div>X</div>
                     <div>LANGUAGE</div>
@@ -139,6 +216,16 @@
 
     <script>
         var resizeFunctions = [];
+
+
+
+        function toggleInfo() {
+            if(event.target.classList.contains("closed")) {
+                event.target.classList.remove("closed");
+            } else {
+                event.target.classList.add("closed");
+            }
+        }
     </script>
 
     <!-- <script src="./Demos/stats.min.js"></script>

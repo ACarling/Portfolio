@@ -37,7 +37,7 @@ export var activeSection = 0;
 export var isDark = true;
 
 
-export var maxStickAmount = 50;
+export var maxStickAmount = 65;
 export var currentStickAmount = 0;
 export var stickTimeout = 4000;
 export var touchStart = [0,0];
@@ -157,7 +157,9 @@ export function initCustomScroll() {
         console.log("Not mobile");
     
         window.addEventListener("wheel", (event) => {
-            verticalScrollDesktop(event.deltaY);
+            if(!event.target.classList.contains("writeup-content")) {
+                verticalScrollDesktop(event.deltaY);
+            }
         });
         
         var keyDown = 0;
