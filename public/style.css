@@ -428,29 +428,26 @@ h1 {
 .info-slider {
     /* clip-path: polygon(100% 20%, 90% 0, 0% 0%, 0% 100%, 90% 100%, 100% 80%);    background-color: white; */
     position: absolute;
-    width: 90vw;
+    width: 250px;
     height: calc(var(--display-height) / 3);
     margin-bottom: 0;
     z-index: 500;
     background-color: rgba(0,0,0,0);
     backdrop-filter: blur(10px);
     cursor: pointer;
-}
-.dark .info-slider {
     border: 1px solid var(--hero);
-}
-.light .info-slider {
-    border: 1px solid var(--hero);
+    border-left: none;
 }
 .info-slider.closed {
-    left: -80vw;
+    left: -200px;
 }
 .info-slider h2 {
+    left: 175px;
+    margin-top: 45px;
+
     pointer-events: none;
     position: absolute;
     rotate: 90deg;
-    margin-top: 45px;
-    left: 325px;
     white-space:nowrap;
     font-family: var(--font);
 }
@@ -472,6 +469,9 @@ h1 {
     }
     .info-slider.closed {
         left: -350px;
+    }
+    .info-slider h2 {
+        left: 325px;
     }
 
 }
