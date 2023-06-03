@@ -23,19 +23,31 @@ var possibleHeroColors = [
 ];
 
 
-export function initGlobalVars() {
+export function initGlobalVars(dontChangeColor) {
     window.asteroidField = [];
             
     window.valueChange = true;
 
-    var storedHeroColor = localStorage.getItem("heroColor");
-    if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
-        storedHeroColor = parseInt(storedHeroColor);
-        var randCol = (storedHeroColor + 1);
-        localStorage.setItem("heroColor", randCol % (possibleHeroColors.length - 1))
+
+    let randCol;
+    if(!dontChangeColor) {
+        var storedHeroColor = localStorage.getItem("heroColor");
+        if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
+            storedHeroColor = parseInt(storedHeroColor);
+            randCol = (storedHeroColor + 1);
+            localStorage.setItem("heroColor", randCol % (possibleHeroColors.length - 1))
+        } else {
+            varrandCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
+            localStorage.setItem("heroColor",randCol)
+        }
     } else {
-        var randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
-        localStorage.setItem("heroColor",randCol)
+        var storedHeroColor = localStorage.getItem("heroColor");
+        if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
+            randCol = parseInt(storedHeroColor);
+        } else {
+            randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
+            localStorage.setItem("heroColor",randCol)
+        }
     }
 
     document.documentElement.style.setProperty('--hero', possibleHeroColors[randCol]);

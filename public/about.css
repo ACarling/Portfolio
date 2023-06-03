@@ -1,6 +1,17 @@
 #about-body {
-    background-color: var(--dark);
+    --dot-size: 3px;
+    --dot-space: 100px;
+
+    background: 
+        linear-gradient(90deg, var(--dark) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center,
+        linear-gradient(var(--dark) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center, var(--dark-mod);
+    background-size: var(--dot-space) var(--dot-space);
     overflow-y: scroll;
+}
+
+.text-outline {
+    text-shadow: -2px -2px 0 var(--dark-mod), 2px -2px 0 var(--dark-mod), -2px 2px 0 var(--dark-mod), 2px 2px 0 var(--dark-mod);
+    color: var(--dark);
 }
 
 h1 {
@@ -11,6 +22,12 @@ h1 {
     position: relative;
     text-align: center;
     margin-bottom: 0px;
+}
+
+h1.bigger {
+    font-size: 75pt;
+    position: absolute;
+    top: 40pt;
 }
 
 .about-section {
@@ -44,8 +61,9 @@ h2 {
 }
 
 .experience-list {
-    border-bottom: 5px solid var(--dark-mod);
     margin-bottom: 15px;
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 
@@ -56,6 +74,13 @@ h2 {
 
 .about-section strong {
     font-weight: 800;
+}
+
+.language-section {
+    padding-top: 20px;
+}
+.language-section span {
+    font-size: 14pt;
 }
 
 #back-link {
@@ -71,6 +96,20 @@ h2 {
     text-transform: uppercase;
 }
 
+.education {
+    display: flex;
+    justify-content: space-between;
+}
+.education h3 {
+    font-weight: bold;
+}
+.education ul {
+    padding: 0px;
+}
+.education li {
+    margin: 0px;
+    text-align: center;
+}
 
 
 @media only screen and (min-width: 800px) {
@@ -81,5 +120,13 @@ h2 {
         margin: auto;
     }
 }
-
-
+@media only screen and (min-width: 1000px) {
+    .experience-list {
+        grid-template-columns: auto auto auto;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .experience-list {
+        grid-template-columns: auto auto auto auto;
+    }
+}
