@@ -1,8 +1,13 @@
+@font-face {
+  font-family: Koulen;
+  src: url(public/Assets/Koulen-Regular.ttf);
+}
+
 :root {
     --dark: #141414;
     --hero: #E59500; /*#00ff62*/
     --light: #E5DADA;
-    --font: 'Teko';
+    --font: "Teko";
     --dark-mod: #202020;
     --light-mod: #ede4e4;
     --display-height: 100vh;
@@ -24,7 +29,7 @@ body {
 
 
 h1 {
-    font-family: var(--font), sans-serif;
+    font-family: var(--font);
     font-weight: 800;
     line-height: .8em;
 }

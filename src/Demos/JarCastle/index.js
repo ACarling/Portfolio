@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import {BaseShader} from './Shaders/BaseShader'
+import {WaterShader} from './Shaders/StreamShader'
 
 const FOV = 20;
 class CastleIndex {
@@ -18,9 +19,33 @@ class CastleIndex {
 	controls = null;
 	directionalLight = null;
 
-	childScene;
 
-	composer;
+	waterMaterial
+
+	waterMaskTarget = new THREE.WebGLRenderTarget(1024, 1024, {
+		magFilter: THREE.NearestFilter,
+		minFilter: THREE.NearestFilter,
+	});
+	maskScene = new THREE.Scene();
+
+
+	reflectTarget = new THREE.WebGLRenderTarget(1024, 1024, {
+		// magFilter: THREE.NearestFilter,
+		// minFilter: THREE.NearestFilter
+	});
+	reflectScene = new THREE.Scene();
+
+
+
+	refractTarget = new THREE.WebGLRenderTarget(1024, 1024, {
+		magFilter: THREE.NearestFilter,
+		minFilter: THREE.NearestFilter,
+	});
+	waterPlane;
+
+	// can use layers
+
+
 
 	constructor() {
 		resizeFunctions.push(() => {
@@ -30,14 +55,15 @@ class CastleIndex {
 
 			this.camera.aspect = window.innerWidth/window.innerHeight;
 			this.camera.updateProjectionMatrix();
+
 			this.renderer.setSize( window.innerWidth, window.innerHeight );
 			this.renderer.setPixelRatio(window.devicePixelRatio);
-
+			this.renderer.outputEncoding = THREE.sRGBEncoding
 		});
 		this.lightSetup();
 	}
 	lightSetup() {
-		this.directionalLight = new THREE.DirectionalLight( window.palletLight, 1 );
+		this.directionalLight = new THREE.DirectionalLight( 0xd6efff, .4 );
 		this.scene.add( this.directionalLight );
 
 
@@ -91,10 +117,47 @@ class CastleIndex {
 		document.getElementById("castle-container").appendChild( this.renderer.domElement );  
 
 		window.animationQueue[sectionID].animationFunction = (delta) => {
+			try {
+				this.waterMaterial.uniforms.uTime.value = ((Date.now() / 1200) % 5000)
+				this.waterMaterial.uniforms.sceneAlbedo.value = this.refractTarget.texture;
+				this.waterMaterial.uniforms.sceneRefractionMask.value = this.waterMaskTarget.texture;
+				this.waterMaterial.uniforms.sceneReflectionTexture.value = this.reflectTarget.texture;
+
+
+			} catch (error) {
+				console.log(error)
+			}
 		};
 
 		window.animationQueue[sectionID].rendererFunction =() => {
-			this.controls.update()
+			
+			
+			// render scene albedo without water
+			this.controls.update();
+			try {
+				this.waterPlane.layers.set(1);
+			} catch (error) {}
+			this.renderer.setRenderTarget(this.refractTarget);
+			this.renderer.render( this.scene, this.camera );
+			try {
+				this.waterPlane.layers.set(0);
+			} catch (error) {}
+
+
+			// render water mask
+			this.renderer.setClearColor( 0xffffff, 1.0 );
+			this.renderer.setRenderTarget(this.waterMaskTarget);
+			this.renderer.render( this.maskScene, this.camera );
+
+			this.renderer.setClearColor( 0xffffff, 0.0 );
+
+			// render reflectedScene
+			this.renderer.setRenderTarget(this.reflectTarget);
+			this.renderer.render( this.reflectScene, this.camera );
+
+
+			// render entire scene
+			this.renderer.setRenderTarget(null);
 			this.renderer.render( this.scene, this.camera );
 		};
 		this.renderer.render( this.scene, this.camera ); 
@@ -104,7 +167,7 @@ class CastleIndex {
 		this.controls.maxPolarAngle = Math.PI / 2
 		this.controls.enablePan = false;
 		this.controls.touches.ONE = THREE.TOUCH.DOLLY_ROTATE;	
-		this.controls.autoRotate = true
+		this.controls.autoRotate = true;
 		this.controls.autoRotateSpeed = -1.5
 		this.loadGLB();
 	}
@@ -124,34 +187,76 @@ class CastleIndex {
 		this.scene.add(glb.scene);
 		console.log(glb.scene.children);
 
-		const baseMat = new THREE.ShaderMaterial({
+		const robotBaseMaterial = new THREE.ShaderMaterial({
 			...BaseShader,
 			fog: true,
 			lights: true,
 			dithering: true,
 			transparent: true,
 		});
-		baseMat.uniforms.paintTex.value.flipY = false
-		baseMat.uniforms.baseTex.value.flipY = false
+		robotBaseMaterial.uniforms.paintTex.value.flipY = false
+		robotBaseMaterial.uniforms.baseTex.value.flipY = false
 
-		baseMat.uniforms.paintColor.value = new THREE.Color(window.palletHero);
-		baseMat.uniforms.rustColor.value = new THREE.Color(0x8f8672);
-		baseMat.uniforms.warningColor.value = new THREE.Color(window.palletDarkmod);
-		// baseMat.uniforms.rus.value = new THREE.Color(0x5ba852)
+		robotBaseMaterial.uniforms.paintColor.value = new THREE.Color(window.palletHero);
+		robotBaseMaterial.uniforms.rustColor.value = new THREE.Color(0x8f8672);
+		robotBaseMaterial.uniforms.warningColor.value = new THREE.Color(window.palletDarkmod);
 
 
-		function rmat(child) {
-			child.material = baseMat;
-			child.castShadow = true
-			child.receiveShadow = true
-
-			child.children.forEach(rchild => {
-				rmat(rchild)
-			});
-		}
-		glb.scene.children.forEach(child => {
-			rmat(child)
+		const wmaterial = new THREE.ShaderMaterial({
+			...WaterShader,
+			fog: true,
+			lights: true,
+			dithering: true,
+			transparent: true,
 		});
+		this.waterMaterial = wmaterial
+
+
+
+		glb.scene.children.forEach(child => {
+			console.log(child.name);
+			child.receiveShadow = true;
+			if(child.name == "Robot") {
+				child.material = robotBaseMaterial;
+				child.castShadow = true;
+			}
+			if(child.name == "Water") {
+				child.material = wmaterial;
+				// child.layers.set(5);
+				this.waterPlane = child;
+			}
+		});
+
+		// this.maskScene.add(glb.scene);
+
+		this.maskScene = this.scene.clone(true);
+
+		let blackMat = new THREE.MeshBasicMaterial({color: 0xffffff});
+		let whiteMat = new THREE.MeshBasicMaterial({color: 0x000000});
+
+		this.maskScene.children[2].children.forEach(child => {
+			child.material = whiteMat;
+			if(child.name == "Water") {
+				child.material = blackMat;
+			}
+		});
+
+
+
+		
+		this.reflectScene = this.scene.clone(true);
+		this.reflectScene.children[0].scale.y = -1;
+		this.reflectScene.children[1].scale.y = -1;
+		this.reflectScene.remove(this.reflectScene.children[2]);
+
+		let glbreflect = await new Promise(resolve => {
+			new GLTFLoader().load('/robot_Scene_reflect.glb', resolve)
+		})
+
+
+		glbreflect.scene.position.y -= 1
+		glbreflect.scene.children.find(child => child.name == "ReflectRobot").material = robotBaseMaterial;
+		this.reflectScene.add(glbreflect.scene);
 	}
 }
 
