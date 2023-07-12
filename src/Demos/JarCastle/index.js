@@ -130,12 +130,13 @@ class CastleIndex {
 		};
 
 		window.animationQueue[sectionID].rendererFunction =() => {
+			this.controls.update();
+
 			if(window.isMobile) {
 				this.renderer.setRenderTarget(null);
 				this.renderer.render( this.scene, this.camera );	
 			} else {
 				// render scene albedo without water
-				this.controls.update();
 				try {
 					this.waterPlane.layers.set(1);
 				} catch (error) {}
