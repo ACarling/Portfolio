@@ -117,48 +117,52 @@ class CastleIndex {
 		document.getElementById("castle-container").appendChild( this.renderer.domElement );  
 
 		window.animationQueue[sectionID].animationFunction = (delta) => {
-			try {
-				this.waterMaterial.uniforms.uTime.value = ((Date.now() / 1200) % 5000)
-				this.waterMaterial.uniforms.sceneAlbedo.value = this.refractTarget.texture;
-				this.waterMaterial.uniforms.sceneRefractionMask.value = this.waterMaskTarget.texture;
-				this.waterMaterial.uniforms.sceneReflectionTexture.value = this.reflectTarget.texture;
-
-
-			} catch (error) {
-				console.log(error)
+			if(!window.isMobile) {
+				try {
+					this.waterMaterial.uniforms.uTime.value = ((Date.now() / 1200) % 5000)
+					this.waterMaterial.uniforms.sceneAlbedo.value = this.refractTarget.texture;
+					this.waterMaterial.uniforms.sceneRefractionMask.value = this.waterMaskTarget.texture;
+					this.waterMaterial.uniforms.sceneReflectionTexture.value = this.reflectTarget.texture;
+				} catch (error) {
+					console.log(error)
+				}
 			}
 		};
 
 		window.animationQueue[sectionID].rendererFunction =() => {
-			
-			
-			// render scene albedo without water
-			this.controls.update();
-			try {
-				this.waterPlane.layers.set(1);
-			} catch (error) {}
-			this.renderer.setRenderTarget(this.refractTarget);
-			this.renderer.render( this.scene, this.camera );
-			try {
-				this.waterPlane.layers.set(0);
-			} catch (error) {}
+			if(window.isMobile) {
+				this.renderer.setRenderTarget(null);
+				this.renderer.render( this.scene, this.camera );	
+			} else {
+				// render scene albedo without water
+				this.controls.update();
+				try {
+					this.waterPlane.layers.set(1);
+				} catch (error) {}
+				this.renderer.setRenderTarget(this.refractTarget);
+				this.renderer.render( this.scene, this.camera );
+				try {
+					this.waterPlane.layers.set(0);
+				} catch (error) {}
 
 
-			// render water mask
-			this.renderer.setClearColor( 0xffffff, 1.0 );
-			this.renderer.setRenderTarget(this.waterMaskTarget);
-			this.renderer.render( this.maskScene, this.camera );
+				// render water mask
+				this.renderer.setClearColor( 0xffffff, 1.0 );
+				this.renderer.setRenderTarget(this.waterMaskTarget);
+				this.renderer.render( this.maskScene, this.camera );
 
-			this.renderer.setClearColor( 0xffffff, 0.0 );
+				this.renderer.setClearColor( 0xffffff, 0.0 );
 
-			// render reflectedScene
-			this.renderer.setRenderTarget(this.reflectTarget);
-			this.renderer.render( this.reflectScene, this.camera );
+				// render reflectedScene
+				this.renderer.setRenderTarget(this.reflectTarget);
+				this.renderer.render( this.reflectScene, this.camera );
 
 
-			// render entire scene
-			this.renderer.setRenderTarget(null);
-			this.renderer.render( this.scene, this.camera );
+				// render entire scene
+				this.renderer.setRenderTarget(null);
+				this.renderer.render( this.scene, this.camera );
+
+			}
 		};
 		this.renderer.render( this.scene, this.camera ); 
 		
@@ -202,61 +206,75 @@ class CastleIndex {
 		robotBaseMaterial.uniforms.warningColor.value = new THREE.Color(window.palletDarkmod);
 
 
-		const wmaterial = new THREE.ShaderMaterial({
-			...WaterShader,
-			fog: true,
-			lights: true,
-			dithering: true,
-			transparent: true,
-		});
-		this.waterMaterial = wmaterial
+		if(!window.isMobile) {
+			const wmaterial = new THREE.ShaderMaterial({
+				...WaterShader,
+				fog: true,
+				lights: true,
+				dithering: true,
+				transparent: true,
+			});
+			this.waterMaterial = wmaterial	
 
+			glb.scene.children.forEach(child => {
+				child.receiveShadow = true;
+				if(child.name == "Robot") {
+					child.material = robotBaseMaterial;
+					child.castShadow = true;
+				}
+				if(child.name == "Water") {
+					child.material = wmaterial;
+					// child.layers.set(5);
+					this.waterPlane = child;
+				}
+			});
+	
+			// this.maskScene.add(glb.scene);
+	
+			this.maskScene = this.scene.clone(true);
+	
+			let blackMat = new THREE.MeshBasicMaterial({color: 0xffffff});
+			let whiteMat = new THREE.MeshBasicMaterial({color: 0x000000});
+	
+			this.maskScene.children[2].children.forEach(child => {
+				child.material = whiteMat;
+				if(child.name == "Water") {
+					child.material = blackMat;
+				}
+			});
+	
+	
+	
+			
+			this.reflectScene = this.scene.clone(true);
+			this.reflectScene.children[0].scale.y = -1;
+			this.reflectScene.children[1].scale.y = -1;
+			this.reflectScene.remove(this.reflectScene.children[2]);
+	
+			let glbreflect = await new Promise(resolve => {
+				new GLTFLoader().load('/robot_Scene_reflect.glb', resolve)
+			})
+	
+	
+			glbreflect.scene.position.y -= 1
+			glbreflect.scene.children.find(child => child.name == "ReflectRobot").material = robotBaseMaterial;
+			this.reflectScene.add(glbreflect.scene);
+		} else {
+			glb.scene.children.forEach(child => {
+				child.receiveShadow = true;
+				if(child.name == "Robot") {
+					child.material = robotBaseMaterial;
+					child.castShadow = true;
+				}
+				if(child.name == "Water") {
+					child.visible = false;
+					// child.material = wmaterial;
+					// // child.layers.set(5);
+					// this.waterPlane = child;
+				}
+			});
 
-
-		glb.scene.children.forEach(child => {
-			console.log(child.name);
-			child.receiveShadow = true;
-			if(child.name == "Robot") {
-				child.material = robotBaseMaterial;
-				child.castShadow = true;
-			}
-			if(child.name == "Water") {
-				child.material = wmaterial;
-				// child.layers.set(5);
-				this.waterPlane = child;
-			}
-		});
-
-		// this.maskScene.add(glb.scene);
-
-		this.maskScene = this.scene.clone(true);
-
-		let blackMat = new THREE.MeshBasicMaterial({color: 0xffffff});
-		let whiteMat = new THREE.MeshBasicMaterial({color: 0x000000});
-
-		this.maskScene.children[2].children.forEach(child => {
-			child.material = whiteMat;
-			if(child.name == "Water") {
-				child.material = blackMat;
-			}
-		});
-
-
-
-		
-		this.reflectScene = this.scene.clone(true);
-		this.reflectScene.children[0].scale.y = -1;
-		this.reflectScene.children[1].scale.y = -1;
-		this.reflectScene.remove(this.reflectScene.children[2]);
-
-		let glbreflect = await new Promise(resolve => {
-			new GLTFLoader().load('/robot_Scene_reflect.glb', resolve)
-		})
-
-
-		glbreflect.scene.position.y -= 1
-		glbreflect.scene.children.find(child => child.name == "ReflectRobot").material = robotBaseMaterial;
-		this.reflectScene.add(glbreflect.scene);
+		}
 	}
 }
 
