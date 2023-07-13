@@ -29,6 +29,7 @@ export const RockShader = {
         varying vec3 WSpos;
         varying vec3 vViewPosition;
 
+        varying mat4 mvmtx;
 
         void main() {
             ${THREE.ShaderChunk["begin_vertex"]}
@@ -36,6 +37,7 @@ export const RockShader = {
             ${THREE.ShaderChunk["defaultnormal_vertex"]}
             ${THREE.ShaderChunk["project_vertex"]}
             ${THREE.ShaderChunk["worldpos_vertex"]}
+            mvmtx = modelViewMatrix;
 
             vNormal = normalize(normalMatrix * normal);
             wNormal = vec3(modelMatrix * vec4(normal, 0.0));
@@ -71,9 +73,14 @@ export const RockShader = {
         varying vec2 vUv;
         varying vec3 WSpos;
 
+        varying mat4 mvmtx;
+
+
         void main() {
 
-            vec3 lightDir = normalize(vec3(-20.0, 20.0, 0.0));
+            vec3 lightDir = vec3(vec4(directionalLights[0].direction, 1.0) * mvmtx);
+
+            
             float nDotL = max(0.0,dot(wNormal, lightDir));
 
             vec3 col = texture2D(baseTex, vUv).rgb + .15;

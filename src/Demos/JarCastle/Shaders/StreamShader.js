@@ -8,6 +8,8 @@ export const WaterShader = {
             THREE.UniformsLib.shadowmap,
             THREE.UniformsLib.fog,
             {
+                shadowColor : {type: 'vec3', value : new THREE.Color(window.palletLightmod)},
+
                 waterColor : {type: 'vec3', value : new THREE.Color(window.palletLightmod)},
                 sceneReflectionTexture: { type: "sampler2D", value: new THREE.TextureLoader().load( normalURL ) },
 
@@ -34,6 +36,8 @@ export const WaterShader = {
         varying vec2 viewportPixelCoord;
         varying vec3 ndc;
 
+        varying mat4 mvmtx;
+
 
         void main() {
             ${THREE.ShaderChunk["begin_vertex"]}
@@ -41,6 +45,7 @@ export const WaterShader = {
             ${THREE.ShaderChunk["defaultnormal_vertex"]}
             ${THREE.ShaderChunk["project_vertex"]}
             ${THREE.ShaderChunk["worldpos_vertex"]}
+            mvmtx = modelViewMatrix;
 
             vNormal = normalize(normalMatrix * normal);
             wNormal = vec3(modelMatrix * vec4(normal, 0.0));
@@ -79,6 +84,7 @@ export const WaterShader = {
         uniform float uTime;
 
         uniform vec3 waterColor;
+        uniform vec3 shadowColor;
 
         varying vec3 vNormal;
         varying vec3 wNormal;
@@ -91,13 +97,15 @@ export const WaterShader = {
         varying vec2 viewportPixelCoord;
         varying vec3 ndc;
 
+        varying mat4 mvmtx;
+
 
         void main() {
             vec3 mappedNormal = 2.0 * (texture2D(rippleTex, fract(
                 (vUv + vec2(0.0, -uTime / 42.0)) * 1.0
             )).rgb) - 1.0;
 
-            vec3 lightDir = normalize(vec3(-20.0, 20.0, 0.0));
+            vec3 lightDir = vec3(vec4(directionalLights[0].direction, 1.0) * mvmtx);
             float nDotL = max(0.0,dot(mappedNormal, lightDir));
             nDotL = saturate(min(nDotL, getShadowMask()) + .2);
 
@@ -111,7 +119,7 @@ export const WaterShader = {
         vec3 viewDirectionW = normalize(cameraPosition - WSpos);
         float fresnelTerm = dot(viewDirectionW, wNormal);
         fresnelTerm = clamp(1.0 - fresnelTerm, 0., 1.);
-        float fresexpon = 2.0;
+        float fresexpon = 1.0;
         float fresdiv = 1.2;
         fresnelTerm = pow(((fresnelTerm)/fresdiv), fresexpon);
 
@@ -132,11 +140,12 @@ export const WaterShader = {
 
             vec4 reflectionDiffuse = texture2D( sceneReflectionTexture, refractedUV ).rgba;
 
-            // reflectionDiffuse.a += ;
-
             vec3 diffuse = mix(waterColor, reflectionDiffuse.rgb, reflectionDiffuse.a * fresnelTerm);
 
-            gl_FragColor = vec4(diffuse, reflectionDiffuse.a * fresnelTerm);
+
+            diffuse = mix(shadowColor, diffuse, vec3(getShadowMask()));
+
+            gl_FragColor = vec4(diffuse, reflectionDiffuse.a * fresnelTerm + (.1 * (1.0 - getShadowMask())));
 
         }
     `

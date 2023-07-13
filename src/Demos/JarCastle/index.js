@@ -143,6 +143,9 @@ class CastleIndex {
 		this.controls.touches.ONE = THREE.TOUCH.DOLLY_ROTATE;	
 		this.controls.autoRotate = true;
 		this.controls.autoRotateSpeed = -.5
+		if(window.isMobile) {
+			this.controls.autoRotateSpeed = -1.5
+		}
 		this.loadGLB();
 	}
 
@@ -196,7 +199,7 @@ class CastleIndex {
 			});
 			this.waterMaterial = wmaterial	
 			this.waterMaterial.uniforms.sceneReflectionTexture.value = this.reflectTarget.texture;
-
+			this.waterMaterial.uniforms.shadowColor.value = new THREE.Color(window.palletDarkmod);
 			glb.scene.children.forEach(child => {
 				child.receiveShadow = true;
 				if(child.name == "Robot") {
@@ -208,7 +211,7 @@ class CastleIndex {
 					this.waterPlane = child;
 				}
 				if(child.name == "Rock") {
-					console.log(rockMaterial.uniforms);
+					child.castShadow = true;
 					rockMaterial.uniforms.baseTex.value = child.material.map;
 					child.material = rockMaterial;
 				}
@@ -218,7 +221,10 @@ class CastleIndex {
 
 			//setup reflect scene (reckon i can just use base scene for this)
 			this.reflectScene = this.scene.clone(true);
-			this.reflectScene.children[0].scale.y = -1;
+			console.log()
+			this.reflectScene.children[0].position.set( -20, -20, 0 ); //default; light shining from top
+			this.reflectScene.children[0].lookAt(0,0,0);
+	
 			this.reflectScene.children[1].scale.y = -1;
 			this.reflectScene.remove(this.reflectScene.children[2]);
 	
@@ -226,9 +232,14 @@ class CastleIndex {
 				new GLTFLoader().load('/robot_Scene_reflect.glb', resolve)
 			});
 	
-			glbreflect.scene.position.y -= 1
+			glbreflect.scene.position.y -= 1;
 			glbreflect.scene.children.find(child => child.name == "ReflectRobot").material = robotBaseMaterial;
-			// glbreflect.scene.children.find(child => child.name != "ReflectRobot").material = rockMaterial;
+			glbreflect.scene.children.find(child => child.name != "ReflectRobot").material = rockMaterial;
+
+			glbreflect.scene.children.forEach(u =>  {
+				u.receiveShadow = true;
+				u.castShadow = true;
+			});
 			this.reflectScene.add(glbreflect.scene);
 
 		// } else {
