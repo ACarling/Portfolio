@@ -106,10 +106,10 @@ function randomCode() {
     var prefix = Math.round(Math.random() * 1000000);
     prefix = String(prefix).padStart(8, '0');
     
-    var mid = safe2LetterCombos[Math.round(Math.random() * safe2LetterCombos.length - 1)];
-    var suffix = safe3LetterCombos[Math.round(Math.random() * safe3LetterCombos.length - 1)] + "_" + String(Math.round(Math.random() * 999)).padStart(5, '0');
+    var mid = safe2LetterCombos[Math.floor(Math.random() * safe2LetterCombos.length - 1)];
+    var suffix = safe3LetterCombos[Math.floor(Math.random() * safe3LetterCombos.length - 1)] + "_" + String(Math.round(Math.random() * 999)).padStart(5, '0');
     
-    return prefix + " " + mid + " " + suffix
+    return "SRN: " + prefix + " " + mid + " " + suffix
 }
 // <p class="background-number">00</p>
 // <p class="page-number">1 : 4</p>

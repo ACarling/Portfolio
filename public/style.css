@@ -384,6 +384,29 @@ h1 {
     .background-number {
         font-size: 80vw;
     }
+    h1.random-code {
+        visibility: hidden;
+        padding: 20px;
+        font-size: 50pt;
+        padding-top: calc(75px);
+        z-index: -5;
+        text-wrap: wrap;
+        /* z-index: -5;
+        font-size: 50pt;
+        padding: 5px;
+        overflow: hidden;
+        text-wrap: nowrap;
+         */
+    }
+    .dark h1.random-code {
+        text-shadow: -1px -1px 0 var(--dark-mod), 1px -1px 0 var(--dark-mod), -1px 1px 0 var(--dark-mod), 1px 1px 0 var(--dark-mod);
+        color: var(--dark);
+        }
+
+    .light h1.random-code {
+        text-shadow: -1px -1px 0 var(--light-mod), 1px -1px 0 var(--light-mod), -1px 1px 0 var(--light-mod), 1px 1px 0 var(--light-mod);
+        color: var(--light);
+    }
 }
 
 @media only screen and (max-height: 530px) {

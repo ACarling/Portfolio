@@ -8,9 +8,7 @@ export const WaterShader = {
             THREE.UniformsLib.shadowmap,
             THREE.UniformsLib.fog,
             {
-                waterColor : {type: 'vec3', value : new THREE.Color(0x9abfd6)},
-                sceneAlbedo: { type: "sampler2D", value: new THREE.TextureLoader().load( normalURL ) },
-                sceneRefractionMask: { type: "sampler2D", value: new THREE.TextureLoader().load( normalURL ) },
+                waterColor : {type: 'vec3', value : new THREE.Color(window.palletLightmod)},
                 sceneReflectionTexture: { type: "sampler2D", value: new THREE.TextureLoader().load( normalURL ) },
 
                 rippleTex: { type: "sampler2D", value: new THREE.TextureLoader().load( normalURL ) },
@@ -77,8 +75,6 @@ export const WaterShader = {
         ${THREE.ShaderChunk["dithering_pars_fragment"]}
 
         uniform sampler2D rippleTex;
-        uniform sampler2D sceneAlbedo;
-        uniform sampler2D sceneRefractionMask;
         uniform sampler2D sceneReflectionTexture;
         uniform float uTime;
 
@@ -94,11 +90,6 @@ export const WaterShader = {
         uniform mat3 normalMatrix;
         varying vec2 viewportPixelCoord;
         varying vec3 ndc;
-
-
-        float fresnel(vec3 normal, vec3 viewDir, float power) {
-            return pow((1.0 - saturate(dot(normalize(normal), normalize(viewDir)))), power);
-        }
 
 
         void main() {
@@ -127,7 +118,7 @@ export const WaterShader = {
 
 
 
-        //apply refraction 
+        //apply reflection 
             float IOR = .025;
             IOR *= length(mappedNormal.rg); // only refract when non up normal frag moves
 
@@ -139,25 +130,11 @@ export const WaterShader = {
 
             vec2 refractedUV = mix(viewportPixelCoord, vsN.xy, IOR);
 
-            float refractionMask = texture2D( sceneRefractionMask, refractedUV ).r;
-            
-
-            if(refractionMask <= 0.0) {
-                refractedUV = viewportPixelCoord;
-            }
-            
-            vec4 refractedDiffuse = texture2D( sceneAlbedo, refractedUV ).rgba;
             vec4 reflectionDiffuse = texture2D( sceneReflectionTexture, refractedUV ).rgba;
 
-            refractedDiffuse.rgb = mix(refractedDiffuse.rgb, vec3(1.0), 1.0 - refractedDiffuse.a);
-            vec3 diffuse = mix(refractedDiffuse.rgb, waterColor, .5);
+            vec3 diffuse = mix(waterColor, reflectionDiffuse.rgb, reflectionDiffuse.a * fresnelTerm);
 
-
-
-            diffuse = mix(diffuse, reflectionDiffuse.rgb, reflectionDiffuse.a * fresnelTerm);
-
-
-            gl_FragColor = vec4(diffuse, refractedDiffuse.a);
+            gl_FragColor = vec4(diffuse, reflectionDiffuse.a * fresnelTerm);
 
         }
     `
