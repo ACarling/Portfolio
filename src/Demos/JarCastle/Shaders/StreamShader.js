@@ -132,6 +132,8 @@ export const WaterShader = {
 
             vec4 reflectionDiffuse = texture2D( sceneReflectionTexture, refractedUV ).rgba;
 
+            // reflectionDiffuse.a += ;
+
             vec3 diffuse = mix(waterColor, reflectionDiffuse.rgb, reflectionDiffuse.a * fresnelTerm);
 
             gl_FragColor = vec4(diffuse, reflectionDiffuse.a * fresnelTerm);

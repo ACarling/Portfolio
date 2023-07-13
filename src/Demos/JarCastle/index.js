@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import {BaseShader} from './Shaders/BaseShader'
 import {WaterShader} from './Shaders/StreamShader'
+import {RockShader} from './Shaders/RockShader'
 
 const FOV = 20;
 class CastleIndex {
@@ -173,6 +174,16 @@ class CastleIndex {
 		robotBaseMaterial.uniforms.paintColor.value = new THREE.Color(window.palletHero);
 		robotBaseMaterial.uniforms.rustColor.value = new THREE.Color(0x8f8672);
 		robotBaseMaterial.uniforms.warningColor.value = new THREE.Color(window.palletDarkmod);
+		robotBaseMaterial.uniforms.shadowColor.value = new THREE.Color(window.palletDarkmod);
+
+		const rockMaterial = new THREE.ShaderMaterial({
+			...RockShader,
+			fog: true,
+			lights: true,
+			dithering: true,
+			transparent: true,
+		});
+		rockMaterial.uniforms.shadowColor.value = new THREE.Color(window.palletDarkmod);
 
 
 		// if(!window.isMobile) {
@@ -196,6 +207,11 @@ class CastleIndex {
 					child.material = wmaterial;
 					this.waterPlane = child;
 				}
+				if(child.name == "Rock") {
+					console.log(rockMaterial.uniforms);
+					rockMaterial.uniforms.baseTex.value = child.material.map;
+					child.material = rockMaterial;
+				}
 			});
 			
 
@@ -212,6 +228,7 @@ class CastleIndex {
 	
 			glbreflect.scene.position.y -= 1
 			glbreflect.scene.children.find(child => child.name == "ReflectRobot").material = robotBaseMaterial;
+			// glbreflect.scene.children.find(child => child.name != "ReflectRobot").material = rockMaterial;
 			this.reflectScene.add(glbreflect.scene);
 
 		// } else {

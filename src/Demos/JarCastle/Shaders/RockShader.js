@@ -1,23 +1,17 @@
 import * as THREE from 'three';
-import { ShaderLib } from '../../Lib';
-import paintURL from '/robot_paint.png'
+
 import baseURL from '/robot_base.png'
 
-export const BaseShader = {
+export const RockShader = {
 
     uniforms: THREE.UniformsUtils.merge([
             THREE.UniformsLib.lights,
             THREE.UniformsLib.shadowmap,
             THREE.UniformsLib.fog,
             {
-                paintTex: { type: "sampler2D", value: new THREE.TextureLoader().load( paintURL ) },
                 baseTex: { type: "sampler2D", value: new THREE.TextureLoader().load( baseURL ) },
                 
-                paintColor : {type: 'vec3', value: new THREE.Color(window.palletHero)},
-                rustColor : {type: 'vec3', value: new THREE.Color(0xffffff)},
-                warningColor : {type: 'vec3', value: new THREE.Color(window.palletDarkmod)},
-                shadowColor : {type: 'vec3', value: new THREE.Color(window.palletDarkmod)},
-
+                shadowColor : {type: 'vec3', value: new THREE.Color(window.palletDarkmod)}
             }
         ]
     ),
@@ -68,12 +62,8 @@ export const BaseShader = {
         ${THREE.ShaderChunk["shadowmask_pars_fragment"]}
         ${THREE.ShaderChunk["dithering_pars_fragment"]}
 
-        uniform sampler2D paintTex;
         uniform sampler2D baseTex;
 
-        uniform vec3 paintColor;
-        uniform vec3 rustColor;
-        uniform vec3 warningColor;
         uniform vec3 shadowColor;
 
         varying vec3 vNormal;
@@ -86,16 +76,10 @@ export const BaseShader = {
             vec3 lightDir = normalize(vec3(-20.0, 20.0, 0.0));
             float nDotL = max(0.0,dot(wNormal, lightDir));
 
-
-            vec3 paint = mix(paintColor, vec3(1.0), texture2D(paintTex, vUv).r);
-
-            vec3 col = mix(texture2D(baseTex, vUv).rgb, warningColor, texture2D(paintTex, vUv).r);
-            col = mix(col, paintColor, texture2D(paintTex, vUv).g);
-            col = mix(col, rustColor, texture2D(paintTex, vUv).b);
+            vec3 col = texture2D(baseTex, vUv).rgb + .15;
 
             col = mix(shadowColor, col, saturate(min(nDotL, getShadowMask()) + .2));
 
-            // gl_FragColor = vec4(vec3(1.0-getShadowMask()), 1.0);
             gl_FragColor = vec4(col, 1.0);
         }
     `
