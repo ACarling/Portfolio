@@ -102,7 +102,7 @@ export const WaterShader = {
 
         void main() {
             vec3 mappedNormal = 2.0 * (texture2D(rippleTex, fract(
-                (vUv + vec2(0.0, -uTime / 42.0)) * 1.0
+                (vUv + vec2(0.0, -uTime / 42.0)) * 4.0
             )).rgb) - 1.0;
 
             vec3 lightDir = vec3(vec4(directionalLights[0].direction, 1.0) * mvmtx);
@@ -114,19 +114,19 @@ export const WaterShader = {
 
 
 
-        // fresnel
+            // fresnel
 
-        vec3 viewDirectionW = normalize(cameraPosition - WSpos);
-        float fresnelTerm = dot(viewDirectionW, wNormal);
-        fresnelTerm = clamp(1.0 - fresnelTerm, 0., 1.);
-        float fresexpon = 1.0;
-        float fresdiv = 1.2;
-        fresnelTerm = pow(((fresnelTerm)/fresdiv), fresexpon);
-
-
+            vec3 viewDirectionW = normalize(cameraPosition - WSpos);
+            float fresnelTerm = dot(viewDirectionW, wNormal);
+            fresnelTerm = clamp(1.0 - fresnelTerm, 0., 1.);
+            float fresexpon = 1.0;
+            float fresdiv = 1.2;
+            fresnelTerm = pow(((fresnelTerm)/fresdiv), fresexpon);
 
 
-        //apply reflection 
+
+
+            //apply reflection 
             float IOR = .025;
             IOR *= length(mappedNormal.rg); // only refract when non up normal frag moves
 
@@ -144,7 +144,7 @@ export const WaterShader = {
 
 
             diffuse = mix(shadowColor, diffuse, vec3(getShadowMask()));
-
+            // diffuse = vec3(nDotL);
             gl_FragColor = vec4(diffuse, reflectionDiffuse.a * fresnelTerm + (.1 * (1.0 - getShadowMask())));
 
         }

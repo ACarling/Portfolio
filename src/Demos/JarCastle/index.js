@@ -189,71 +189,45 @@ class CastleIndex {
 		rockMaterial.uniforms.shadowColor.value = new THREE.Color(window.palletDarkmod);
 
 
-		// if(!window.isMobile) {
-			const wmaterial = new THREE.ShaderMaterial({
-				...WaterShader,
-				fog: true,
-				lights: true,
-				dithering: true,
-				transparent: true,
-			});
-			this.waterMaterial = wmaterial	
-			this.waterMaterial.uniforms.sceneReflectionTexture.value = this.reflectTarget.texture;
-			this.waterMaterial.uniforms.shadowColor.value = new THREE.Color(window.palletDarkmod);
-			glb.scene.children.forEach(child => {
-				child.receiveShadow = true;
-				if(child.name == "Robot") {
-					child.material = robotBaseMaterial;
-					child.castShadow = true;
-				}
-				if(child.name == "Water") {
-					child.material = wmaterial;
-					this.waterPlane = child;
-				}
-				if(child.name == "Rock") {
-					child.castShadow = true;
-					rockMaterial.uniforms.baseTex.value = child.material.map;
-					child.material = rockMaterial;
-				}
-			});
-			
+		const wmaterial = new THREE.ShaderMaterial({
+			...WaterShader,
+			fog: true,
+			lights: true,
+			dithering: true,
+			transparent: true,
+		});
+		this.waterMaterial = wmaterial	
+		this.waterMaterial.uniforms.sceneReflectionTexture.value = this.reflectTarget.texture;
+		this.waterMaterial.uniforms.shadowColor.value = new THREE.Color(window.palletDarkmod);
+		glb.scene.children.forEach(child => {
+			child.receiveShadow = true;
+			if(child.name == "Robot") {
+				child.material = robotBaseMaterial;
+				child.castShadow = true;
+			}
+			if(child.name == "Water") {
+				child.material = wmaterial;
+				this.waterPlane = child;
+			}
+			if(child.name == "Rock") {
+				child.castShadow = true;
+				rockMaterial.uniforms.baseTex.value = child.material.map;
+				child.material = rockMaterial;
+			}
+		});
+		
 
 
-			//setup reflect scene (reckon i can just use base scene for this)
-			this.reflectScene = this.scene.clone(true);
-			console.log()
-			this.reflectScene.children[0].position.set( -20, -20, 0 ); //default; light shining from top
-			this.reflectScene.children[0].lookAt(0,0,0);
-	
-			this.reflectScene.children[1].scale.y = -1;
-			this.reflectScene.remove(this.reflectScene.children[2]);
-	
-			let glbreflect = await new Promise(resolve => {
-				new GLTFLoader().load('/robot_Scene_reflect.glb', resolve)
-			});
-	
-			glbreflect.scene.position.y -= 1;
-			glbreflect.scene.children.find(child => child.name == "ReflectRobot").material = robotBaseMaterial;
-			glbreflect.scene.children.find(child => child.name != "ReflectRobot").material = rockMaterial;
+		//setup reflect scene (reckon i can just use base scene for this)
+		this.reflectScene = this.scene.clone(true);
 
-			glbreflect.scene.children.forEach(u =>  {
-				u.receiveShadow = true;
-				u.castShadow = true;
-			});
-			this.reflectScene.add(glbreflect.scene);
+		this.reflectScene.children[0].position.set( -20, -20, 0 ); //default; light shining from top
+		this.reflectScene.children[0].lookAt(0,0,0);
 
-		// } else {
-		// 	glb.scene.children.forEach(child => {
-		// 		child.receiveShadow = true;
-		// 		if(child.name == "Robot") {
-		// 			child.material = robotBaseMaterial;
-		// 			child.castShadow = true;
-		// 		}
-		// 		if(child.name == "Water") {
-		// 			child.visible = false;
-		// 		}
-		// 	});
-		// }
+		this.reflectScene.children[2].remove(this.reflectScene.getObjectByName("Water"));
+		this.reflectScene.children[2].children.forEach(gltfChild => {
+			gltfChild.scale.y = -1;
+		})
 	}
 }
 
