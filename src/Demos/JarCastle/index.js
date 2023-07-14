@@ -121,18 +121,11 @@ class CastleIndex {
 
 		window.animationQueue[sectionID].rendererFunction =() => {
 			this.controls.update();
-			// test with just plane with reflection + normal map ripples and cut off (rocks too if want)
+			this.renderer.setRenderTarget(this.reflectTarget);
+			this.renderer.render( this.reflectScene, this.camera );
 
-			// if(window.isMobile) {
-				// this.renderer.setRenderTarget(null);
-				// this.renderer.render( this.scene, this.camera );	
-			// } else {
-				this.renderer.setRenderTarget(this.reflectTarget);
-				this.renderer.render( this.reflectScene, this.camera );
-
-				this.renderer.setRenderTarget(null);
-				this.renderer.render( this.scene, this.camera );
-			// }
+			this.renderer.setRenderTarget(null);
+			this.renderer.render( this.scene, this.camera );
 		};
 		this.renderer.render( this.scene, this.camera ); 
 		

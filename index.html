@@ -189,6 +189,11 @@
                     I used a mostly procedural workflow for the base map. I also used curvature and AO maps for the first pass of the grit layer of the paint mask.
                     <br>
                     I then used alpha stamps for the paint before blurring it and subtracting another grit mask to give the paint a worn look.
+                    <br>
+                    Rocks were created using a displacement modifyer and noise inside Blender and then hand painted.
+                    <br> <br>
+                    Originally I had the water surface transparent with refraction and reflection though I decided that having just an alpha cutout of the reflection (warped by a normal map) would look far more interesting for this showpiece scene. 
+                    To achieve the reflection I utilised a planar method where I duplicate the geometry and mirror it over the water surface, I render this in a different scene and then project this texture onto the water plane and offset its sampling coordinates slightly using a water normal map.  
                 </p>
             </div>
         </div>
