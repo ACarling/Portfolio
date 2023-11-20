@@ -13,12 +13,9 @@ export const remove_loader_animation_timing = {
 
 
 var possibleHeroColors = [
-    "#00ff62",
     "#E59500",
     "#F93943",
-    "#9e4af7",
     "#c3ff00",
-    "#00ffe5",
 ];
 
 
