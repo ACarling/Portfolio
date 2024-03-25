@@ -291,6 +291,9 @@ h1 {
     left: 20px;
     top: 20px;
     margin: 0px;
+    cursor: pointer;
+
+    user-select: none;
 }
 
 

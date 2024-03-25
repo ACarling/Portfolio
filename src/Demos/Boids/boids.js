@@ -42,7 +42,12 @@ export class BoidController {
         this.camera.position.z = this.depth + .5 * Math.min(this.height, this.width);
 
         let geometry = new THREE.ConeGeometry(1 * this.boidSize, 4 * this.boidSize,32); 
-        boidMaterial = new THREE.MeshBasicMaterial( { color: window.palletFish } );
+        boidMaterial = new THREE.MeshBasicMaterial( { color: window.palletHero } );
+
+        window.addEventListener("onColorChanged", (ev) => {
+            const newColor = ev.color
+            boidMaterial.color = new THREE.Color(window.palletHero)
+        })
 
         for (var i = 0; i < this.numBoids; i += 1) {
             // let BoidGeom = new THREE.Mesh( geometry, Math.random() > .5 ? materialb : boidMaterial ); //new THREE.Mesh( geometry, boidMaterial);

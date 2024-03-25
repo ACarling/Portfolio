@@ -18,7 +18,7 @@ import { sections, activeSection } from "./customScroll";
 
 
 
-
+let renderAll = false;
 
 export class RenderFunction {
     animationFunction = null;
@@ -35,15 +35,26 @@ export function animate() {
     if(window.animationQueue[activeSection].animationFunction) {
         window.animationQueue[activeSection].rendererFunction();
     }
+    if (renderAll) {
+        for(let i = 0; i < window.animationQueue.length; i++) {
+            if (i == activeSection) { continue; }
+            window.animationQueue[i].animationFunction(0);
+            window.animationQueue[i].rendererFunction();    
+        }
+    }
+
 
     // stats.end();
 	requestAnimationFrame( animate );
-
+    renderAll = false
 }
 
 
 export function initAnimationDispatcher() {
     window.animationQueue = [];
+    window.addEventListener("onColorChanged", (ev) => {
+        renderAll = true
+    })
     sections.forEach(() => {
         window.animationQueue.push(new RenderFunction);
     });

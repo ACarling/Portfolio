@@ -1,4 +1,4 @@
-import { initGlobalVars } from './src/Demos/GlobalVar';
+import { initGlobalVars, setColors } from './src/Demos/GlobalVar';
 initGlobalVars();
 
 
@@ -20,7 +20,9 @@ resizeFunctions.push(() => {
 
 document.body.onload = function init() {
     // add numbers and set up scenese
-
+    document.getElementById("scrollPos").addEventListener("click", ev => {
+        setColors(false, Math.random() * 360)
+    });
     
     initCustomScroll();
     initAnimationDispatcher();

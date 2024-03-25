@@ -12,19 +12,26 @@ export const remove_loader_animation_timing = {
 }
 
 
+function hslToHex(h, s, l) {
+    l /= 100;
+    const a = s * Math.min(l, 1 - l) / 100;
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+
 var possibleHeroColors = [
     "#E59500",
     "#F93943",
     "#c3ff00",
+    "#E59500"
 ];
 
-
-export function initGlobalVars(dontChangeColor) {
-    window.asteroidField = [];
-            
-    window.valueChange = true;
-
-
+export function setColors(dontChangeColor, customHeroHue) {
     let randCol;
     if(!dontChangeColor) {
         var storedHeroColor = localStorage.getItem("heroColor");
@@ -46,7 +53,11 @@ export function initGlobalVars(dontChangeColor) {
         }
     }
 
-    document.documentElement.style.setProperty('--hero', possibleHeroColors[randCol]);
+    if (!customHeroHue) {
+        document.documentElement.style.setProperty('--hero', possibleHeroColors[randCol]);
+    } else {
+        document.documentElement.style.setProperty('--hero', hslToHex(customHeroHue, 100, 45));
+    }
 
     window.cssDark = getComputedStyle(document.documentElement).getPropertyValue('--dark')
     window.cssLight = getComputedStyle(document.documentElement).getPropertyValue('--light')
@@ -61,6 +72,21 @@ export function initGlobalVars(dontChangeColor) {
     window.palletHero = Number("0x" + window.cssHero.split("#")[1]);
     window.palletDarkmod = Number("0x" + window.cssDarkMod.split("#")[1]);
     window.palletLightmod = Number("0x" + window.cssLightMod.split("#")[1]);
+
+
+    console.log(window.palletHero)
+    window.dispatchEvent(new Event("onColorChanged", { color: window.palletHero }))
+
+}
+
+export function initGlobalVars(dontChangeColor) {
+    window.asteroidField = [];
+            
+    window.valueChange = true;
+
+    setColors(dontChangeColor)
+
+
 
     window.palletWaterDeep = 0x1a5b9c;
     window.palletWaterShallow = 0xa4e0da;
@@ -86,7 +112,6 @@ export function initGlobalVars(dontChangeColor) {
 
     window.palletLight = 0x5e84ab
     window.palletGround = 0xa1a1a1
-    window.palletFish = window.palletHero
     window.avoidFactor = 0.1; 
     window.turnFactor = .1; 
     window.centeringFactor = 0.002;

@@ -98,6 +98,11 @@ class PlanetIndex {
 		material.uniforms.colorDark.value = new THREE.Color(window.palletDark)
 		material.uniforms.colorDark2.value = new THREE.Color(window.palletDarkmod)
 
+		window.addEventListener("onColorChanged", (ev) => {
+            material.uniforms.colora.value = new THREE.Color(window.palletHero)
+        })
+
+
 		this.planet = new THREE.Mesh( geometry, material ); 
 		this.planet.castShadow = true; //default is false
 		// planet.receiveShadow = true;

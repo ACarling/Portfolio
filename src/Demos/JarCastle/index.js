@@ -168,6 +168,11 @@ class CastleIndex {
 		robotBaseMaterial.uniforms.baseTex.value.flipY = false
 
 		robotBaseMaterial.uniforms.paintColor.value = new THREE.Color(window.palletHero);
+		window.addEventListener("onColorChanged", (ev) => {
+            const newColor = ev.color
+            robotBaseMaterial.uniforms.paintColor.value = new THREE.Color(window.palletHero)
+        })
+
 		robotBaseMaterial.uniforms.rustColor.value = new THREE.Color(0x8f8672);
 		robotBaseMaterial.uniforms.warningColor.value = new THREE.Color(window.palletDarkmod);
 		robotBaseMaterial.uniforms.shadowColor.value = new THREE.Color(window.palletDarkmod);
