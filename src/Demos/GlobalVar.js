@@ -29,29 +29,32 @@ var possibleHeroColors = [
 ];
 
 export function setColors(dontChangeColor, customHeroHue) {
-    let randCol;
-    if(!dontChangeColor) {
-        var storedHeroColor = localStorage.getItem("heroColor");
-        if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
-            storedHeroColor = parseInt(storedHeroColor);
-            randCol = (storedHeroColor + 1);
-            localStorage.setItem("heroColor", randCol % (possibleHeroColors.length - 1))
-        } else {
-            randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
-            localStorage.setItem("heroColor",randCol)
-        }
-    } else {
-        var storedHeroColor = localStorage.getItem("heroColor");
-        if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
-            randCol = parseInt(storedHeroColor);
-        } else {
-            randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
-            localStorage.setItem("heroColor",randCol)
-        }
-    }
+    // let randCol;
+    // if(!dontChangeColor) {
+    //     var storedHeroColor = localStorage.getItem("heroColor");
+    //     if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
+    //         storedHeroColor = parseInt(storedHeroColor);
+    //         randCol = (storedHeroColor + 1);
+    //         localStorage.setItem("heroColor", randCol % (possibleHeroColors.length - 1))
+    //     } else {
+    //         randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
+    //         localStorage.setItem("heroColor",randCol)
+    //     }
+    // } else {
+    //     var storedHeroColor = localStorage.getItem("heroColor");
+    //     if(storedHeroColor !== undefined && storedHeroColor !== null && !isNaN(storedHeroColor)) {
+    //         randCol = parseInt(storedHeroColor);
+    //     } else {
+    //         randCol = Math.round(Math.random() * (possibleHeroColors.length - 1));
+    //         localStorage.setItem("heroColor",randCol)
+    //     }
+    // }
+
+    localStorage.setItem("heroColor", "#F93943")
 
     if (!customHeroHue) {
-        document.documentElement.style.setProperty('--hero', possibleHeroColors[randCol]);
+        // document.documentElement.style.setProperty('--hero', possibleHeroColors[randCol]);
+        document.documentElement.style.setProperty('--hero', "#F93943");
     } else {
         document.documentElement.style.setProperty('--hero', hslToHex(customHeroHue, 100, 45));
     }
