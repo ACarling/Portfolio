@@ -25,10 +25,7 @@ function hslToHex(h, s, l) {
 
 
 var possibleHeroColors = [
-    "#E59500",
     "#F93943",
-    "#c3ff00",
-    "#E59500"
 ];
 
 export function setColors(dontChangeColor, customHeroHue) {
